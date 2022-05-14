@@ -15,7 +15,7 @@ steps:
         from_secret: ubuntu_server_password
       port: 22
       script:
-        - cd /home/ubuntu/code/9X-wiki/BarryLee 
+        - cd /home/ubuntu/code/9X-wiki/barryLee 
         - git pull 
         - export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v16.14.2/bin
         - node index.js 
