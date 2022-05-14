@@ -1,0 +1,48 @@
+kind: pipeline
+type: docker
+name: deploy
+
+clone:
+  disable: true
+
+steps:
+  - name: deploy
+    image: appleboy/drone-ssh:1.6.3
+    settings:
+      host: 101.42.135.206
+      username: ubuntu
+      password:
+        from_secret: ubuntu_server_password
+      port: 22
+      script:
+        - cd /home/ubuntu/code/9X-wiki/BarryLee 
+        - git pull 
+        - export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v16.14.2/bin
+        - node index.js 
+        - sudo nginx -s reload
+
+  - name: email
+    image: drillster/drone-email
+    settings:
+      subject: '九星知识库——李明部署: [{{ build.status }}] ({{ repo.branch }}) #{{ build.number }}'
+      host: smtp.qq.com
+      port: 465
+      from: 
+        from_secret: email_user
+      username:
+        from_secret: email_user
+      password:
+        from_secret: email_password
+      recipients: liming@9xing.cn
+      recipients_only: true
+    when:
+      status:
+        - success
+        - changed
+        - failure
+
+trigger:
+  event:
+    - push
+  branch:
+    - master

@@ -6,17 +6,190 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="https://cdn.9xing.cn/docsify/4.12.2/themes/vue.min.css" />
+  <link rel="stylesheet" href="https://cdn.9xing.cn/docsify-gifcontrol/0.2.1/docsify-gifcontrol.css" />
+  <!-- <link rel="stylesheet" href="https://cdn.9xing.cn/docsify-sidebar-collapse/1.3.5/sidebar-folder.min.css" /> -->
+  <link rel="stylesheet" href="https://cdn.9xing.cn/docsify-sidebar-collapse/1.3.5/sidebar-folder-mine.min.css" />
+  <link rel="stylesheet" href="https://cdn.9xing.cn/katex/0.15.1/katex.min.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="app"></div>
+  <!-- mermaid支持 -->
+  <script src="https://cdn.9xing.cn/mermaid/8.13.4/mermaid.min.js"></script>
+  <!-- flowchart支持 -->
+  <script src="https://cdn.9xing.cn/raphael/2.3.0/raphael.min.js"></script>
+  <script src="https://cdn.9xing.cn/flowchart/1.17.1/flowchart.min.js"></script>
+  <script src="myflowchart.js"></script>
   <script>
+    var mermaidNum = 0;
+    mermaid.initialize({ startOnLoad: false });
+
     window.$docsify = {
-      name: '',
-      repo: ''
-    }
+      name: 'BarryLee wiki',
+      repo: 'https://github.com/IricBing/megrez.git',
+      loadSidebar: true,
+      // routerMode: 'history',
+      // logo: 'logo.jpg',
+      relativePath: true, // 启用相对路径
+      sidebarDisplayLevel: 0, // set sidebar display level
+      formatUpdated: '{MM}/{DD} {HH}:{mm}',
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
+      'flexible-alerts': {
+        style: 'flat'
+      },
+      copyCode: {
+        buttonText: '点击复制',
+        errorText: '复制失败',
+        successText: '已复制'
+      },
+      pagination: {
+        previousText: '上一章',
+        nextText: '下一章',
+        crossChapter: true,
+        crossChapterText: true
+      },
+      count: {
+        countable: true,
+        position: 'top',
+        margin: '10px',
+        float: 'right',
+        fontsize: '0.9em',
+        color: 'rgb(90,90,90)',
+        language: 'chinese',
+        isExpected: true
+      },
+      progress: {
+        position: 'top',
+        color: 'var(--theme-color,#42b983)',
+        height: '3px'
+      },
+      toc: {
+        tocMaxLevel: 5,
+        target: 'h2, h3, h4, h5, h6'
+      },
+      search: {
+        maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+        placeholder: '关键字搜索',
+        noData: '暂无笔记',
+        depth: 6, // 搜索标题的最大层级, 1 - 6
+        hideOtherSidebarContent: false // 是否隐藏其他侧边栏内容
+      },
+      tabs: {
+        persist: true, // default
+        sync: true, // default
+        theme: 'classic', // default
+        tabComments: true, // default
+        tabHeadings: true // default
+      },
+      markdown: {
+        renderer: {
+          code: function (code, lang) {
+            if (lang === 'mermaid') {
+              return '<div class="mermaid">' + mermaid.render('mermaid-svg-' + mermaidNum++, code) + '</div>';
+            }
+            if (lang === 'flow') {
+              return (
+                '<div><textarea id="gengzi_code_' +
+                flownow++ +
+                '" style="width: 100%;display:none;" rows="11"  >' +
+                code +
+                "</textarea></div><div id='canvas" +
+                canvasnow++ +
+                "'></div>"
+              );
+            }
+            if (lang === 'drawio') {
+              if (window.drawioConverter) {
+                return window.drawioConverter(code);
+              } else {
+                return `<div class='drawio-code'>${code}</div>`;
+              }
+            }
+            
+            return this.origin.code.apply(this, arguments);
+          }
+        }
+      },
+      beian: {
+        ICP: '辽ICP备17016380号-5',
+        NISMSP: {
+          number: '',
+          url: '',
+          id: ''
+        }
+      }
+    };
   </script>
+
+  <!-- service work支持 -->
+  <!-- <script type="module" src="./registerServiceWorker.js"></script> -->
+
   <!-- Docsify v4 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="https://cdn.9xing.cn/docsify/4.12.2/docsify.min.js"></script>
+  <!-- 备案组件 -->
+  <script src="https://cdn.9xing.cn/docsify-beian/1.1.1/beian.min.js"></script>
+  <!-- 图片缩放 -->
+  <script src="https://cdn.9xing.cn/docsify/4.12.2/plugins/zoom-image.min.js"></script>
+  <!-- emoji图标支持 -->
+  <script src="https://cdn.9xing.cn/docsify/4.12.2/plugins/emoji.min.js"></script>
+  <!-- 搜索支持 -->
+  <script src="https://cdn.9xing.cn/docsify/4.12.2/plugins/search.min.js"></script>
+  <!-- 复制到剪切板功能 -->
+  <script src="https://cdn.9xing.cn/docsify-copy-code/2.1.1/docsify-copy-code.min.js"></script>
+  <!-- 上一章/下一章功能 -->
+  <script src="https://cdn.9xing.cn/docsify-pagination/2.6.2/docsify-pagination.min.js"></script>
+  <!-- 上一章/下一章功能 -->
+  <script src="https://cdn.9xing.cn/docsify-count/1.1.0/docsify-count.min.js"></script>
+  <!-- 阅读进度功能 -->
+  <script src="https://cdn.9xing.cn/docsify-progress/1.0.3/docsify-progress.min.js"></script>
+  <!-- 阅读进度功能 -->
+  <script src="https://cdn.9xing.cn/docsify-sidebar-collapse/1.3.5/docsify-sidebar-collapse.min.js"></script>
+  <!-- 右侧导航栏功能 -->
+  <script src="https://cdn.9xing.cn/docsify-plugin-toc/1.2.1/docsify-plugin-toc.min.js"></script>
+  <!-- 高亮块 -->
+  <script src="https://cdn.9xing.cn/docsify-plugin-flexible-alerts/1.1.0/docsify-plugin-flexible-alerts.min.js"></script>
+  <!-- katex支持 -->
+  <script src="https://cdn.9xing.cn/docsify-katex/1.4.3/docsify-katex.js"></script>
+  <!-- GIF控制功能 -->
+  <script src="https://cdn.9xing.cn/docsify-gifcontrol/0.2.1/docsify-gifcontrol.js"></script>
+  <!-- drawio支持 -->
+  <script src="https://cdn.9xing.cn/docsify-drawio/1.0.7/viewer.min.js"></script>
+  <script src="https://cdn.9xing.cn/docsify-drawio/1.0.7/drawio.js"></script>
+  <!-- tabs支持 -->
+  <script src="https://cdn.9xing.cn/docsify-tabs/1.5.2/docsify-tabs.min.js"></script>
+  <!-- <script src="./tabs.js"></script> -->
+  <!-- pdf预览支持 -->
+  <script src="https://cdn.9xing.cn/pdfobject/2.2.7/pdfobject.min.js"></script>
+  <script src="https://cdn.9xing.cn/docsify-pdf-embed/1.0.8/docsify-pdf-embed.js"></script>
+
+  <!-- PrismJS 组件 -->
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-c.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-bash.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-json.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-nginx.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-git.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-lua.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-csharp.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-typescript.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-python.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-java.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-xml-doc.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-ini.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-powershell.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-shell-session.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-yaml.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-markdown.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-latex.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-go.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-sql.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-batch.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-docker.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-apacheconf.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-makefile.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-cmake.min.js"></script>
+  <script src="https://cdn.9xing.cn/prismjs/1.25.0/components/prism-csv.min.js"></script>
 </body>
 </html>
