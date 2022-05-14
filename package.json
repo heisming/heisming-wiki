@@ -1,0 +1,25 @@
+{
+  "name": "barrylee",
+  "version": "1.0.0",
+  "description": "个人wiki",
+  "author": "liming@9xing.cn",
+  "license": "GPL-v3",
+  "scripts": {
+    "start": "docsify serve docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.9xing.cn:wiki/barryLee.git"
+  },
+  "keywords": [
+    "wiki"
+  ],
+  "main": "index.js",
+  "devDependencies": {
+    "docsify-cli": "^4.4.4",
+    "docsify-tabs": "^1.5.2",
+    "marked": "^4.0.15",
+    "prettier": "^2.6.2",
+    "prismjs": "^1.28.0"
+  }
+}
