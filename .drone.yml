@@ -25,7 +25,7 @@ steps:
     image: drillster/drone-email
     settings:
       subject: '九星知识库——李明部署: [{{ build.status }}] ({{ repo.branch }}) #{{ build.number }}'
-      host: smtp.qq.com
+      host: smtp.mxhichina.com
       port: 465
       from: 
         from_secret: email_user
