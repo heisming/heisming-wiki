@@ -1,7 +1,11 @@
-const language = require('./docs/编程语言');
+const wiki = require('./docs/0.wiki');
+const language = require('./docs/1.编程语言');
+const frame = require('./docs/2.热门框架');
 
 const sidebar = [
-  language
+  wiki,
+  language,
+  frame
 ];
 
 const tail = path => {
