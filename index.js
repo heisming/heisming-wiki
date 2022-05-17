@@ -1,11 +1,15 @@
 const wiki = require('./docs/0.wiki');
 const language = require('./docs/1.编程语言');
 const frame = require('./docs/2.热门框架');
+const serverCommunication = require('./docs/3.服务通信');
+const OSSLicense = require('./docs/4.一些标准');
 
 const sidebar = [
   wiki,
   language,
-  frame
+  frame,
+  serverCommunication,
+  OSSLicense,
 ];
 
 const tail = path => {
