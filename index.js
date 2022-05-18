@@ -3,6 +3,7 @@ const language = require('./docs/1.编程语言');
 const frame = require('./docs/2.热门框架');
 const serverCommunication = require('./docs/3.服务通信');
 const OSSLicense = require('./docs/4.一些标准');
+const _2d = require('./docs/5.2D图形');
 
 const sidebar = [
   wiki,
@@ -10,6 +11,7 @@ const sidebar = [
   frame,
   serverCommunication,
   OSSLicense,
+  _2d,
 ];
 
 const tail = path => {
