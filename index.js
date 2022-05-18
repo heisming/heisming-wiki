@@ -6,6 +6,7 @@ const OSSLicense = require('./docs/4.一些标准');
 const _2d = require('./docs/5.2D图形');
 const _3d = require('./docs/6.3D图形');
 const softSkill =require('./docs/7.软技能')
+const design =require('./docs/8.编程思想')
 
 const sidebar = [
   wiki,
@@ -16,6 +17,7 @@ const sidebar = [
   _2d,
   _3d,
   softSkill,
+  design,
 ];
 
 const tail = path => {
