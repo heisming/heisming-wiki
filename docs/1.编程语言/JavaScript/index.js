@@ -1,4 +1,7 @@
+const TypeScript = require('./TypeScript')
+
 module.exports = {
   title: 'JavaScript',
-  path: '/1.编程语言/JavaScript/',
+  children: [TypeScript],
+  // path: '/1.编程语言/JavaScript/',
 }

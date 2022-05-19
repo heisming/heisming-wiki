@@ -5,7 +5,7 @@
   "author": "liming@9xing.cn",
   "license": "GPL-v3",
   "scripts": {
-    "start": "node index.js && docsify serve docs",
+    "start": "node index.js && docsify serve docs -p 9762",
     "build": "node index.js"
   },
   "repository": {
