@@ -6,7 +6,7 @@ module.exports = {
     scss,
     {
       title: 'CSS',
-      path: '/1.编程语言/CSS/'
+      path: '/10.代码规范/CSS/'
     },
   ]
 }

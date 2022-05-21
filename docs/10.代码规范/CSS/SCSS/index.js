@@ -1,4 +1,4 @@
 module.exports = {
   title: 'SCSS',
-  path: '/1.编程语言/CSS/SCSS/'
+  path: '/10.代码规范/CSS/SCSS/'
 }

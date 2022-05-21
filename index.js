@@ -9,6 +9,7 @@ const softSkill = require('./docs/7.软技能')
 const design = require('./docs/8.编程思想')
 const nodejs = require('./docs/9.Node.js')
 const codeStyle = require('./docs/10.代码规范')
+const javascriptAlgorithms = require('./docs/11.数据算法')
 
 const sidebar = [
   wiki,
@@ -22,6 +23,7 @@ const sidebar = [
   design,
   nodejs,
   codeStyle,
+  javascriptAlgorithms,
 ];
 
 const tail = path => {
