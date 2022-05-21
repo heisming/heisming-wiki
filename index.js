@@ -5,8 +5,10 @@ const serverCommunication = require('./docs/3.服务通信');
 const OSSLicense = require('./docs/4.一些标准');
 const _2d = require('./docs/5.2D图形');
 const _3d = require('./docs/6.3D图形');
-const softSkill =require('./docs/7.软技能')
-const design =require('./docs/8.编程思想')
+const softSkill = require('./docs/7.软技能')
+const design = require('./docs/8.编程思想')
+const nodejs = require('./docs/9.Node.js')
+const codeStyle = require('./docs/10.代码规范')
 
 const sidebar = [
   wiki,
@@ -18,6 +20,8 @@ const sidebar = [
   _3d,
   softSkill,
   design,
+  nodejs,
+  codeStyle,
 ];
 
 const tail = path => {
