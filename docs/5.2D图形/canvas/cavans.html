@@ -1,0 +1,39 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <script src="https://cdn.9xing.cn/vue/3.2.33/vue.global.min.js"></script> -->
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="root">
+      <canvas id="canvas"></canvas>
+    </div>
+  </body>
+
+  <script>
+    // const app = Vue.createApp({
+    //   el: '#root',
+    //   component: HelloWorld,
+    //   template: `<hello-world />`,
+    // });
+
+    // app.component('hello-world', {
+    //   template: `<div>hello world<div>`,
+    // });
+    var ctx = document.getElementById('canvas').getContext('2d');
+    function draw() {
+      ctx.font = '48px serif';
+      ctx.fillText('Hello world', 10, 50);
+    }
+    const img = new Image(); // 创建img元素
+    img.src = 'http://www.heisming.com/assets/images/small-head.jpg'; // 设置图片源地址
+    img.onload = function () {
+      // 执行drawImage语句
+      ctx.drawImage(img, 0, 50);
+    };
+    draw();
+  </script>
+</html>
