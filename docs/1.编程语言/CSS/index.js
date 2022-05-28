@@ -1,4 +1,5 @@
 const scss = require('./SCSS')
+const bootstrap = require('./Bootstrap')
 
 module.exports = {
   title: 'CSS',
@@ -8,5 +9,6 @@ module.exports = {
       path: '/1.编程语言/CSS/'
     },
     scss,
+    bootstrap
   ]
 }
