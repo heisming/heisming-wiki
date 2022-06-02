@@ -10,6 +10,7 @@ const design = require('./docs/8.编程思想')
 const nodejs = require('./docs/9.Node.js')
 const codeStyle = require('./docs/10.代码规范')
 const javascriptAlgorithms = require('./docs/11.数据算法')
+const performanceOptimization = require('./docs/14.性能优化')
 
 const sidebar = [
   wiki,
@@ -24,6 +25,7 @@ const sidebar = [
   nodejs,
   codeStyle,
   javascriptAlgorithms,
+  performanceOptimization,
 ];
 
 const tail = path => {

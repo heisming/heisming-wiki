@@ -47,7 +47,7 @@
 
 #### 网络加载性能
 
-![image-20210927102817766](D:\front-end\study\MarkDown\性能优化\image\network.png)
+![image-20210927102817766](assets/images/network.png)
 
 
 
@@ -71,7 +71,7 @@
 
 - Does not use passive listeners to improve scrolling performance
 
-![image-20210927090826455](D:\front-end\study\MarkDown\性能优化\image\lighthouse.png)
+![image-20210927090826455](assets/images/lighthouse.png)
 
 
 
@@ -91,7 +91,7 @@
 
 查看页面帧数——人的肉眼60fps
 
-![image-20210927102206133](D:\front-end\study\MarkDown\性能优化\image\performance.png)
+![image-20210927102206133](assets/images/performance.png)
 
 
 
@@ -114,7 +114,7 @@ L => Load加载
 #### 评估标准
 
 - 响应：处理事件应在50ms以内完成
-  - ![](D:\front-end\study\MarkDown\性能优化\image\50ms.png)
+  - ![](assets/images/50ms.png)
 - 动画：每10ms产生一帧（渲染准备也需要时间）
 - 空闲：尽可能增加空闲时间（业务运算代码在后台做）
 - 加载：在5s内完成内容加载并可以交互
@@ -137,7 +137,7 @@ L => Load加载
 
 https://webpagetest.org/
 
-![image-20210927161625733](D:\front-end\study\MarkDown\性能优化\image\webpagetest.png)
+![image-20210927161625733](assets/images/webpagetest.png)
 
 
 
@@ -236,7 +236,7 @@ Y
 
 分析报告结果位置（粘贴浏览器访问）
 
-![image-20210927165719768](D:\front-end\study\MarkDown\性能优化\image\npm-lighthouse.png)
+![image-20210927165719768](assets/images/npm_lighthouse.png)
 
 
 
@@ -265,7 +265,7 @@ const compression = require('compression')
 app.use(compression())
 ```
 
-![image-20210927172649344](D:\front-end\study\MarkDown\性能优化\image\\scalesize.png)
+![image-20210927172649344](assets/images/\scalesize.png)
 
 319KB是网络传输的大小
 
@@ -285,7 +285,7 @@ app.use(compression())
 
 记录页面开始到所有页面加载完成时的情况
 
-![image-20210927172950449](D:\front-end\study\MarkDown\性能优化\image\record.png)
+![image-20210927172950449](assets/images/record.png)
 
 
 
@@ -451,7 +451,7 @@ const update = () => {
 window.addEventListener('load', update, false)
 ```
 
-![relayout](D:\front-end\study\MarkDown\性能优化\image\relayout.png)
+![relayout](assets/images/relayout.png)
 
 
 
@@ -474,11 +474,11 @@ window.addEventListener('load', update, false)
 
 红色小三角表示操作任务过长
 
-![layout thrashing](D:\front-end\study\MarkDown\性能优化\image\layout thrashing.png)
+![layout thrashing](assets/images/layout_thrashing.png)
 
 强制回流
 
-![Forced reflow](D:\front-end\study\MarkDown\性能优化\image\Forced reflow.png)
+![Forced reflow](assets/images/forced_reflow.png)
 
 
 
@@ -543,7 +543,7 @@ Move all your visual effects to these things. Transition everything else at your
 - 利用`DevTools`识别`paint`的瓶颈
 - 利用`will-change`创建新的图层
 
-![image-20220103204618160](D:\front-end\study\MarkDown\性能优化\image\life of a frame.png)
+![image-20220103204618160](assets/images/life_of_a_frame.png)
 
 
 
@@ -588,11 +588,11 @@ windown.addEventListener('pointermove', e => {
 - requestIdleCallback的问题
 - 通过rAF模拟rIC
 
-![image-20220103203859938](D:\front-end\study\MarkDown\性能优化\image\rAF to rIC.png)
+![image-20220103203859938](assets/images/rAF_to_rIC.png)
 
 
 
-![image-20220103205517092](D:\front-end\study\MarkDown\性能优化\image\ric_polyfill.png)
+![image-20220103205517092](assets/images/ric_polyfill.png)
 
 
 
