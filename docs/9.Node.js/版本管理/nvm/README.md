@@ -1,5 +1,5 @@
 # nvm
->原文来自https://www.virtualbing.fun/#/NodeJS/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/nvm/Windows10%E5%AE%89%E8%A3%85
+>[原文](https://www.virtualbing.fun/#/NodeJS/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/nvm/Windows10%E5%AE%89%E8%A3%85)
 
 ## Windows10安装nvm
 
