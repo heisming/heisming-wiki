@@ -1,5 +1,5 @@
 # npm换源
-
+> ![原文](https://www.virtualbing.fun/#/NodeJS/npm/%E6%8D%A2%E6%BA%90-%E5%B7%A5%E5%85%B7%E7%89%88)
 > windows环境下nrm可能安装不成功，因为它已经**不再更新**了！
 
 ## 初始化换源流程
