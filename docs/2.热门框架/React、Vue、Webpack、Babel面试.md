@@ -808,30 +808,30 @@ export default {
 
 - created 
 
-  - | 过程                        | 解释                              |
-    | --------------------------- | --------------------------------- |
-    | **初始化**                  |                                   |
-    | setup                       | 第一位                            |
-    | parent=>beforeCreate        |                                   |
-    | parent=>Created             |                                   |
-    | parent=>onBeforeMounted     | 父组件创建完毕后才准备挂载子组件  |
-    | parent=>**renderTracked**   | ★★★每次渲染后重新收集响应式依赖   |
-    | child=>beforeCreate         |                                   |
-    | child=>Created              |                                   |
-    | child=>onBeforeMounted      |                                   |
-    | child=>onMounted            |                                   |
-    | parent=>onMounted           |                                   |
-    | **点击更新**                |                                   |
-    | parent=>**renderTriggered** | ★★★每次触发页面重新渲染时自动执行 |
-    | parent=>onBeforeUpdate      |                                   |
-    | child=>onBeforeUpdate       |                                   |
-    | child=>onUpdated            |                                   |
-    | parent=>onUpdated           |                                   |
-    | **销毁时**                  |                                   |
-    | parent=>onBeforeUnmount     |                                   |
-    | child=>onBeforeUnmount      |                                   |
-    | child=>onUnmounted          |                                   |
-    | parent=>onUnmounted         |                                   |
+  - | 过程                          | 解释                                                         |
+    | ----------------------------- | ------------------------------------------------------------ |
+    | **初始化**                    |                                                              |
+    | setup                         | 第一位                                                       |
+    | `parent`=>beforeCreate        |                                                              |
+    | `parent`=>Created             |                                                              |
+    | `parent`=>onBeforeMounted     | 父组件创建完毕后才准备挂载子组件                             |
+    | `parent`=>**renderTracked**   | ★★★每次渲染后重新收集响应式依赖                              |
+    | **child**=>beforeCreate       |                                                              |
+    | **child**=>Created            |                                                              |
+    | **child**=>onBeforeMounted    |                                                              |
+    | **child**=>onMounted          |                                                              |
+    | `parent`=>onMounted           |                                                              |
+    | **点击更新**                  |                                                              |
+    | `parent`=>**renderTriggered** | ★★★每次触发页面重新渲染时自动执行                            |
+    | `parent`=>onBeforeUpdate      | [与页面视图绑定的data数据发生变化是才会触发](https://blog.csdn.net/wq_ocean_/article/details/108918689) |
+    | **child**=>onBeforeUpdate     |                                                              |
+    | **child**=>onUpdated          |                                                              |
+    | `parent`=>onUpdated           |                                                              |
+    | **销毁时**                    |                                                              |
+    | `parent`=>onBeforeUnmount     |                                                              |
+    | **child**=>onBeforeUnmount    |                                                              |
+    | **child**=>onUnmounted        |                                                              |
+    | `parent`=>onUnmounted         |                                                              |
 
 - beforeMounted 父 > 子
 
@@ -841,9 +841,9 @@ export default {
 
 - updated 子 > 父
 
-- beforeDestroy 父 > 子 推导待验证 √
+- beforeDestroy 父 > 子 推导待验证 ✔
 
-- destroyed 子 > 父 推导待验证 √
+- destroyed 子 > 父 推导待验证 ✔
 
 
 

@@ -8,5 +8,9 @@ module.exports = {
     React, 
     Vue, 
     uniApp,
+    {
+      title: '组件库',
+      path: '/2.热门框架/组件库.md'
+    }
   ]
 }
