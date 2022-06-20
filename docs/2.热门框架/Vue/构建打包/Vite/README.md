@@ -1,4 +1,5 @@
 # Vite
+>[优秀项目](https://github.com/vitejs/awesome-vite#templates)
 
 ## 中文官网
 
