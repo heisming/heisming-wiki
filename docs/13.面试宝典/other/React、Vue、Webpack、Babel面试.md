@@ -1,6 +1,6 @@
 # React、Vue、Webpack、Babel面试
 
-![](D:\front-end\study\MarkDown\frames\image\思维导图.png)
+![](../assets/images/思维导图.png)
 
 ## 面试题
 

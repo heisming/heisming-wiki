@@ -20,7 +20,7 @@ npm i --save redux
 
 ### /todolist.js
 
-```react
+```js
 import React from 'react';
 import 'antd/dist/antd.css'
 import { getInputChangeAction, getAddItemAction, 
