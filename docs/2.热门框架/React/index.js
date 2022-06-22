@@ -1,3 +1,4 @@
+const project = require('./周边生态')
 const reactRouter = require('./router')
 const store = require('./store')
 
@@ -15,5 +16,6 @@ module.exports = {
     },
     reactRouter,
     store,
+    project,
   ]
 }
