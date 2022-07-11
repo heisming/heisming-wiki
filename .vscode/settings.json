@@ -28,5 +28,8 @@
   },
   "[markdown]": {
     "editor.defaultFormatter": "mervin.markdown-formatter"
-  }
+  },
+  "cSpell.words": [
+    "typeof"
+  ]
 }

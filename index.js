@@ -13,6 +13,7 @@ const javascriptAlgorithms = require('./docs/11.数据算法')
 const interview = require('./docs/13.面试宝典')
 const performanceOptimization = require('./docs/14.性能优化')
 const book = require('./docs/15.还有书籍')
+const npm = require('./docs/16.库')
 
 const sidebar = [
   wiki,
@@ -29,7 +30,8 @@ const sidebar = [
   javascriptAlgorithms,
   interview,
   performanceOptimization,
-  book
+  book,
+  npm
 ];
 
 const tail = path => {
