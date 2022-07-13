@@ -14,6 +14,7 @@ $ npm i -g pnpm
 ### 正式安装
 
 ```bash
+# 必须先装nnrm才可以安装后两个
 $ npm i nnrm -g --registry=http://registry.npmmirror.com
 $ npm i nyrm -g --registry=http://registry.npmmirror.com
 $ npm i prm -g --registry=http://registry.npmmirror.com
