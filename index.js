@@ -35,7 +35,7 @@ const sidebar = [
   performanceOptimization,
   book,
   npm,
-  project,
+  // project,
   openWrt
 ];
 
