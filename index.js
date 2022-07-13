@@ -15,7 +15,8 @@ const performanceOptimization = require('./docs/14.性能优化')
 const book = require('./docs/15.还有书籍')
 const npm = require('./docs/16.常用库')
 // const db = require('./docs/17.数据库')
-const project = require('./docs/18.项目经历')
+// const project = require('./docs/18.项目经历')
+const openWrt = require('./docs/19.OpenWrt')
 
 const sidebar = [
   wiki,
@@ -34,7 +35,8 @@ const sidebar = [
   performanceOptimization,
   book,
   npm,
-  project
+  project,
+  openWrt
 ];
 
 const tail = path => {
