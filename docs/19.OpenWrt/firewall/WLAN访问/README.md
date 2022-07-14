@@ -8,7 +8,8 @@
 - A路由器LAN下的电脑如何访问B路由器LAN下的电脑，要设置B路由器允许wan区域到lan区域的转发，再加上端口转发的设置
   
 ## 操作演示
-[整体测试图示](../assets/network.drawio ':include :type=code')
+
+[整体测试图示](../assets/Network.drawio ':include :type=code')
 
 > 默认情况下`TP-LINK`下的`PC1`是无法访问到`OpenWrt`的配置页的，因为默认情况下是会被其防火墙拦截掉的
 
