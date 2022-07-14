@@ -38,6 +38,8 @@ config redirect
 > 配置完DMZ后会导致80端口也会被转发，导致TP-LINK设备下的所有PC无法进入OpenWrt配置页面
 
 ### 解决
+> 前提条件[通信规则](./WLAN%E8%AE%BF%E9%97%AE/README.md#规则解析)开启了80端口入站
+
 只需要在端口转发页面配置如下规则：(一定要放在最前面)
 
 ![](assets/dmz/dmz.png)
