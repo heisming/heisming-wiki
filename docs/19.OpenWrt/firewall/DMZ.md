@@ -1,4 +1,6 @@
 # DMZ
+[使用 VLAN 的 fw3 DMZ 配置](https://openwrt.org/docs/guide-user/firewall/fw3_configurations/fw3_dmz)
+
 > 为了解决安装防火墙后外部网络的访问用户不能访问内部网络服务器的问题。 
 > 
 > 启用 DMZ 主机后，可以直接从因特网访问设置为 DMZ 主机的计算机。
@@ -42,7 +44,7 @@ config redirect
 
 只需要在端口转发页面配置如下规则：(一定要放在最前面)
 
-![](assets/dmz/dmz.png)
+![](assets/dmz/80.png)
 
 > 192.168.5.116 设备是[上层路由](#操作演示)DHCP分配给OpenWrt的ip地址
 
