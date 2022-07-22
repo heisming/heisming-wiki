@@ -5,3 +5,5 @@
 [alibaba](https://f2e.tech/)
 
 [roadmap](https://roadmap.sh/frontend)
+
+[go](https://www.processon.com/view/link/61c53fb31efad45a2b42afd9#map)

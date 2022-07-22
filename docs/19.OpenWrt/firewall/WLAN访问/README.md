@@ -46,7 +46,7 @@ config rule
         option name 'Allow-http'
 
 # 重启firewall
-/etc/init.d/firewall restart
+/etc/init.d/firewall reload
 ```
 
 **规则解析**

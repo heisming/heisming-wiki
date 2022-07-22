@@ -31,7 +31,7 @@ config redirect
         option proto 'all'
 
 # 重启firewall
-/etc/init.d/firewall restart
+/etc/init.d/firewall reload
 ```
 
 这样就可以实现DMZ功能了
