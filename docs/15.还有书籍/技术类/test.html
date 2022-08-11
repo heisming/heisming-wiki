@@ -4,34 +4,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>hi~vue</title>
-    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script> -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
 </head>
 <body>
-  <span id="harry" style="line-height: 32px;">&nbsp;</span><br>
-  <input id="trigger" type="text" />
+  <div id="app">
+   <h1>没有Ctrl别来点我</h1>
+  </div>
 </body>
 <script type="text/javascript">
-  let harry = document.getElementById('harry');
-  let trigger = document.getElementById('trigger');
-  let key = 'profile'; // 对象属性键名
-  let store = {} // 辅助get取值
-  let obj = {  // 对象
-    profile: ''
-  }
-
-  Object.defineProperty(obj, key, {
-    set(value) {
-      harry.innerText = value // 重点：修改DOM节点视图
-      store[key] = value
+  const app = {
+    data() {
+      return {
+        counter: 0
+      }
     },
-    get() {
-      return  store[key]
+    methods: {
+      handleSubmit () {
+        console.log(`submit ${++this.counter} timers`);
+      },
+      some() {
+        console.log('enter')
+      }
     }
-  })
-  trigger.addEventListener('keyup', function() {
-    obj[key] = this.value;
-    console.log(obj[key]);
-    console.log(this);
-  })
+  }
+  Vue.createApp(app).mount('#app');
 </script>
 </html>

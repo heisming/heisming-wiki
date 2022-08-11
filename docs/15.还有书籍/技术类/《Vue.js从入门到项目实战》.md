@@ -220,4 +220,160 @@ console.log(p.name);
 
 Vue3全面（IE11除外）使用Proxy取代了Object.defineProperty，性能Proxy更强。
 
+无论是变量、表达式、执行函数 ，还是DOM代码，Vue都只将结果当文本处理。
 
+## 事件绑定
+```js
+// Cannot read properties of undefined (reading 'log')
+<button v-on:click="console.log('A Vue App')">输出消息</button>
+// Cannot read properties of undefined (reading 'console')
+<button v-on:click=" () => console.log('A Vue App')">输出消息</button>
+
+```
+
+V2中，这一行代码可以正常输出，V3不行，因为V3中这段代码在当前Vue视图对象作用域中运行，实际运行的是`this.console.log('A Vue App')`, 当前的Vue对象是没有这个console属性的。
+
+### 获得事件对象
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 1.在事件函数不必传参时，可以这样写，注意：不能带() -->
+    <input type="text" @keyup="handleKeyUp" />
+    <br>
+    <!-- 2.手动传入$event对象 -->
+    <input type="text" @keyup="handleKeyUp($event)" />
+  </div>
+</body>
+<script type="text/javascript">
+  const app = {
+    methods: {
+      handleKeyUp (event) {
+        console.log(event.key, event);
+      }
+    }
+  }
+  Vue.createApp(app).mount('#app');
+</script>
+</html>
+
+```
+
+运行上例代码：发现都输出了事件对象。
+
+onclick和@click的区别：
+- 事件绑定解决了不同浏览器之间的兼容问题；
+- 事件绑定提供了语法糖——事件绑定修饰符。
+
+### 常见事件修饰符
+js原生：
+```js
+event.preventDefault(); // 阻止节点数默认行为
+event.stopPropagation(); // 阻止事件冒泡
+```
+[Vue](https://cn.vuejs.org/guide/essentials/event-handling.html#event-modifiers)封装后：
+| 名称 | 可用版本 | 可用事件 | 说明 |
+| ---- | ---- | ----| ----|
+| .stop | 所有 | 任意 | 当事件触发时，阻止事件冒泡 |
+| .prevent | 所有 | 任意 | 当事件触发时，阻止元素默认行为 |
+| .capture | 所有 | 任意 | 当事件触发时，阻止事件捕获 |
+| .self | 所有 | 任意 | 限制事件仅作用于节点自身 |
+| .once | 2.1.4+ | 任意 | 事件被触发一次后即解除监听 |
+| .passive | 2.3.0+ | 滚动 | 移动端，限制事件永不调用preventDefault()方法 |
+
+上代码：
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <form @submit="handleSubmit">
+      <h2>不使用修饰符时</h2>
+      <button type="submit">提交</button>
+    </form>
+    <form @submit.prevent="handleSubmit">
+      <h2>使用.prevent修饰符时</h2>
+      <button type="submit">提交(.prevent)</button>
+    </form>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = {
+    data() {
+      return {
+        counter: 0
+      }
+    },
+    methods: {
+      handleSubmit () {
+        console.log(`submit ${++this.counter} timers`);
+      }
+    }
+  }
+  Vue.createApp(app).mount('#app');
+</script>
+</html>
+```
+
+点击<button>提交</button>可以看到页面不断刷新重载, 点击<button>提交(.prevent)</button>，可以看到控制台不停的输出累加值。
+
+#### 多修饰符
+当事件名称后有多个修饰符时，要注意修饰符的排列顺序，相应的代码会根据排列顺序依次产生。
+`@click.prevent.self`：Vue先执行了event.preventDefault(), 因此会阻止元素上的所有单击事件；
+`@click.self.prevent`: Vue先会配置event.self，只会阻止对元素自身的点击。
+
+### 按键修饰符
+V2允许将按键值作用修饰符来使用，如监听回车键（键盘13）是否被按下？
+```html
+  <input type="text" @keyup.13="console.log($event)" />
+```
+[V3](https://cn.vuejs.org/guide/essentials/event-handling.html#key-modifiers)，已被遗弃，只提供常用别名按键修饰符
+| 别名修饰符 | 对应按键 | 
+| ---- | ---- |
+| .delete | 回格/删除 |
+| .tab | 制表 | 
+| .enter | 回车 |
+| .esc | 退出 |
+| .space | 空格 | 
+| .left | 左 |
+| .up | 上 |
+| .right | 右 |
+| .down | 下 |
+V3版：
+```html
+  <input type="text" @keyup.enter="() => console.log($event)" />
+```
+
+### 鼠标按键事件
+| 别名修饰符|  可用版本 | 对应按键 | 
+| ----   | ---- | ---- |
+| .left     | 2.2.0+ | 左键 |
+| .right    |  2.2.0+ | 右键 |
+| .middle   |  2.2.0+ | 中键 |
+
+### 组合修饰符
+| 别名修饰符|  可用版本 | 对应按键 | 
+| ----   | ---- | ---- |
+| .ctrl     | 2.1.0+ | Ctrl |
+| .alt    |  2.1.0+ | Alt |
+| .shift   |  2.1.0+ | Shift |
+| .meta   |  2.1.0+ | meat键(win===田) |
+
+Demo: 
+
+
+
+### 双向绑定❗
