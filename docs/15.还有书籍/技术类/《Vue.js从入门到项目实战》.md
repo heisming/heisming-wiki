@@ -373,7 +373,156 @@ V3版：
 | .meta   |  2.1.0+ | meat键(win===田) |
 
 Demo: 
-
-
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1 @click.ctrl="logWithCtrl" @click="logSingle">没有Ctrl别来点我</h1>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = {
+    methods: {
+      logWithCtrl (event) {
+        console.log(`---------分割线---------`);
+        console.log(`$event.ctrlKey:`, event.ctrlKey);
+        console.log('按住，是的；按住Ctrl');
+      },
+      logSingle() {
+        if(!event.ctrlKey) {
+          console.log(`---------分割线---------`);
+          console.log(`$event.ctrlKey:`, event.ctrlKey);
+          console.log('点我干啥，单身汪！');
+        } else {
+          console.log('不错，进步很快呀！');
+        }
+      }
+    }
+  }
+  Vue.createApp(app).mount('#app');
+</script>
+</html>
+```
 
 ### 双向绑定❗
+v-model：输入元素（input & textarea）创建双向数据绑定。
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+   <h3>单行文本框</h3>
+   <input type="text" v-model="singleText" style="width: 240px"/>
+   <p>{{singleText}}</p>
+   <hr>
+
+   <h3>多行文本框</h3>
+   <textarea v-model="multiText" style="width: 240px"></textarea>
+   <p>{{multiText}}</p>
+   <hr>
+
+   <h3>单选框</h3>
+   <!-- 由于点击被选中的单选项无法取消其被选中的状态，所以实战中一般没有使用单个单选项的场景。
+    这里，设置v-model共用一个变量(radioValue)可实现RadioGroup的效果
+   -->
+   <input id="ra" type="radio" value="杨玉环" v-model="radioValue" />
+   <label for="ra">A.杨玉环</label>
+   <input id="ra" type="radio" value="赵飞燕" v-model="radioValue" />
+   <label for="rb">B.赵飞燕</label>
+   <p>{{radioValue}}</p>
+   <hr>
+
+   <h3>单个复选框</h3>
+   <!-- 单个复选框被用于true和false的切换 -->
+   <input id="c" type="checkbox" v-model="toggleValue" />
+   <label for="c">天生丽质</label>
+   <p>{{toggleValue}}</p>
+   <hr>
+
+   <h3>多个复选框</h3>
+   <!-- 多个复选框，v-model接受数组类型变量 -->
+   <input id="ca" type="checkbox" value="漂亮" v-model="checkedValues" />
+   <label for="ca">A.回眸一笑百媚生</label>
+   <input id="cb" type="checkbox" value="瘦弱" v-model="checkedValues" />
+   <label for="cb">B.体轻能为掌上舞</label>
+   <input id="cc" type="checkbox" value="得宠" v-model="checkedValues" />
+   <label for="cc">C.三千宠爱在一身</label>
+   <p>{{ checkedValues.join(',') }}</p>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = {
+    data() {
+      return {
+        singleText: '',
+        multiText: '',
+        radioValue: '',
+        toggleValue: false,
+        checkedValues: []
+      }
+    }
+  }
+  Vue.createApp(app).mount('#app');
+</script>
+</html>
+```
+
+#### 下拉选择框
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+   <h3>下拉选择框</h3>
+   <select v-model="singleSelect">
+    <!-- 如果没有设置value,则option节点的文本值会被当做value值 -->
+    <option value="汉代">汉代</option>
+    <option>唐代</option>
+   </select>
+   <p>{{singleSelect}}</p>
+   <hr>
+
+   <h3>多选下拉选择框</h3>
+   <select multiple v-model="multiSelect">
+    <!-- 按住Ctrl键,可执行多选 -->
+    <option value="1">出生微寒</option>
+    <option value="2">饱受争议</option>
+    <!-- TODO why? -->
+    <option :value="3">结局悲凉</option>
+   </select>
+   <p>{{multiSelect.join(',')}}</p>
+   <hr>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = {
+    data() {
+      return {
+        singleSelect: '唐代', // 根据value设置默认
+        multiSelect: [1, 3]
+      }
+    }
+  }
+  Vue.createApp(app).mount('#app');
+</script>
+</html>
+```
