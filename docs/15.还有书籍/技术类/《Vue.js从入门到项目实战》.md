@@ -411,7 +411,7 @@ Demo:
 </html>
 ```
 
-### 双向绑定❗
+## 双向绑定❗
 v-model：输入元素（input & textarea）创建双向数据绑定。
 ```html
 <html lang="en">
@@ -526,3 +526,224 @@ v-model：输入元素（input & textarea）创建双向数据绑定。
 </script>
 </html>
 ```
+
+#### 修饰符
+| 修饰符 | 可用版本 | 说明 |
+| ---- | ---- | ---- |
+| .lazy | 所有 | 将用户输入的数据赋值于变量的时机由输入时延迟到数据改变时|
+| .number | 所有 | 自动转换用户输入为数值类型 |
+| .trim | 所有 | 自动过滤用户输入的收尾空白字符 |
+```html 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <input type="text" v-model.number="num" @keyup="handleKeyUp" />
+    <input type="text" v-model.lazy="lazy" @keyup="handleLazy" />
+  </div>
+</body>
+<script type="text/javascript">
+  const app = {
+    data() {
+      return {
+        num: '',
+        lazy: '',
+      }
+    },
+    methods: {
+      handleKeyUp() {
+        // let x = parseFloat(this.num);
+        console.log(this.num, typeof this.num);
+      },
+      handleLazy() {
+        console.log(this.lazy, typeof this.lazy);
+      }
+    }
+  }
+  Vue.createApp(app).mount('#app');
+</script>
+</html>
+```
+
+#### 自定义组件
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 自定义组件v-model -->
+    <custom-screen v-model="text"></custom-screen>
+    <br>
+    <!-- 原生元素v-model-->
+    <input type="text" v-model="text" />
+  </div>
+</body>
+<script type="text/javascript">
+  const app = Vue.createApp({
+    data() {
+      return {
+        text: ''
+      }
+    },
+  })
+  app.component('custom-screen', {
+    props: ['modelValue'],
+    methods: {
+      handleReset () {
+        console.log('重置为\'\'');
+        this.$emit('update:modelValue', '');
+        // 使用$emit发送update:modelValue事件，并将目标值作为参数传出
+      }      
+    },
+    template: `
+      <div>
+        <h2>输入值为： {{ modelValue }}</h2>
+        <button @click="handleReset">重置为空</button>
+      </div>
+    `
+  })
+  app.mount('#app');
+</script>
+</html>
+```
+V3,自定义组件的modelValue属性和update:modelValue事件尤为重要，它们分别负责不同的数据传递。modelValue属性用于接收外部传入的值。已更新组件的内部状态。
+
+## v-if和v-show
+条件渲染与`display:none`控制
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2 v-show="visible">v-show, visible = true</h2>
+    <h2 v-show="!visible">v-show, visible = false</h2>
+    <h2 v-if="visible">v-if, visible = true</h2>
+    <h2 v-if="!visible">v-if, visible = false</h2>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = {
+    data() {
+      return {
+        visible: false
+      }
+    },
+  }
+  Vue.createApp(app).mount('#app');
+</script>
+</html>
+```
+v-show并不能算作真正的条件渲染，因为挂载它的多个元素之间并没有条件上下文关系。
+
+v-if没有DOM，v-show是有DOM的。注意以下几点：
+- v-if会在切换中将组件上的事件监听器和子组件销毁和重建。当组件被销毁时，该组件将无法被任何方式获取，因为它不存在于DOM中。
+- 在创建父组件时，如果子组件的v-if被判定为假，则Vue不会对子组件做任何事情，知道第一次判断为真时。这在使用Vue生命周期钩子函数时要尤为注意，如果Vue生命周期已走过组件创建的阶段却仍无法获取组件对象，应该想一想是不是v-if在作怪。
+- v-show有更高的初始渲染开销，而v-if有更高的切换开销，这与它们的实现机制有关。使用它们时要多加考虑具体的应用场景。
+- v-show不支持template元素
+
+## v-for
+除了渲染数组之外，还可以渲染一个对象的键值对
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>用户列表</h2>
+    <ul>
+      <!-- index作为第二个参数，用于标示下标 -->
+      <li v-for="(user, index) in users">
+        用户{{ index + 1 }}
+        <ul>
+          <!-- key作为第二个参数，用于标示键名 -->
+          <li v-for="(value, key) of user">{{ key }}:&nbsp;{{ value }}</li>
+          <li v-for="(value, index) of user">{{ index }}:&nbsp;{{ value }}</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = {
+    data() {
+      return {
+        users: [
+          { name: 'Clark', age: 27, city: 'Chicago' },
+          { name: 'Jackson', age: 28, city: 'Sydney'}
+        ]
+      }
+    },
+  }
+  Vue.createApp(app).mount('#app');
+</script>
+</html>
+```
+
+Vue会把数组当做被观察者加入响应式系统中，`当调用一些方法修改数组时，对应的视图将会同步更新`。
+与数据响应有关的数组方法
+| 名称 | 说明 |
+|----| ---- |
+| push | 将一个或多个元素添加至数组末尾，并返回新数组的长度 |
+| pop | 从数组中删除并返回最后一个元素 |
+| shift | 从数组删除并烦恼会第一个元素 |
+| unshift | 将一个或多个元素添加至数组开头，并返回新数组的长度 |
+| splice | 从数组中删除元素或向数组添加元素 |
+| sort | 对数组元素进行排序，默认按照Unicode编码排序，返回排序后的数组（localeCompare） |
+| reverse | 将数组中的元素位置颠倒，返回颠倒后的数组 |
+
+### 列表渲染的中的key
+每个迭代元素都应该有一个不重复的key。
+当列表渲染被重新执行（数组内容发生变化）时，如果不使用key，则Vue会为数组成员就近复用已存在的DOM节点，
+```js
+// 不使用key时
+{
+  arr-number1 : DOM1,
+  arr-number2 : DOM2,
+  arr-number3 : DOM3,
+}
+// 当数组内容发生变化时
+{
+  arr-number3 : DOM1,
+  arr-number1 : DOM2,
+  arr-number2 : DOM3,
+}
+```
+当使用key时，Vue会根据key的变化重新排列节点顺序，并将移除key不存在的节点
+```js
+// 使用key时，身份追踪
+{
+  arr-number1 : DOM1,
+  arr-number2 : DOM2,
+  arr-number3 : DOM3,
+// 当数组内容发生变化时
+}
+{
+  arr-number3 : DOM3,
+  arr-number1 : DOM1,
+  arr-number2 : DOM2,
+}
+```
+实质上，key的存在是为DOM节点标注一个身份信息，让Vue能够有迹可循追踪到数据对应的节点。在实战开发中，是否使用key不会影响功能的实现，不过在2.2.0+的版本中，会有警告。

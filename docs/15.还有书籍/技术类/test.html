@@ -8,34 +8,33 @@
 </head>
 <body>
   <div id="app">
-   <h3>下拉选择框</h3>
-   <select v-model="singleSelect">
-    <!-- 如果没有设置value,则option节点的文本值会被当做value值 -->
-    <option value="汉代">汉代</option>
-    <option>唐代</option>
-   </select>
-   <p>{{singleSelect}}</p>
-   <hr>
-
-   <h3>多选下拉选择框</h3>
-   <select multiple v-model="multiSelect">
-    <!-- 按住Ctrl键,可执行多选 -->
-    <option value="1">出生微寒</option>
-    <option value="2">饱受争议</option>
-    <!-- TODO why? -->
-    <option :value="3">结局悲凉</option>
-   </select>
-   <p>{{multiSelect.join(',')}}</p>
-   <hr>
+    <h2>用户列表</h2>
+    <ul>
+      <!-- index作为第二个参数，用于标示下标 -->
+      <li v-for="(value, index) in arr">
+        {{ value }}
+      </li>
+    </ul>
+    <button @click="test">test</button>
   </div>
 </body>
 <script type="text/javascript">
   const app = {
     data() {
       return {
-        singleSelect: '唐代', // 根据value设置默认
-        multiSelect: [1, 3]
+        arr: [
+         1, 2, 3 
+        ]
       }
+    },
+    mounted() {
+      this.arr[3] = 4
+      this.arr[1] = 4
+    },
+    methods: {
+      test() {
+        this.arr[1] = 45
+      },
     }
   }
   Vue.createApp(app).mount('#app');
