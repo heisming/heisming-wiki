@@ -31,7 +31,7 @@ const sidebar = [
   nodejs,
   codeStyle,
   javascriptAlgorithms,
-  interview,
+  // interview,
   performanceOptimization,
   book,
   npm,
