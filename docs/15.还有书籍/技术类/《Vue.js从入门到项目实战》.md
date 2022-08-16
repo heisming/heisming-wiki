@@ -618,7 +618,7 @@ v-model：输入元素（input & textarea）创建双向数据绑定。
 </script>
 </html>
 ```
-V3,自定义组件的modelValue属性和update:modelValue事件尤为重要，它们分别负责不同的数据传递。modelValue属性用于接收外部传入的值。已更新组件的内部状态。
+V3,自定义组件的modelValue属性和update:modelValue事件尤为重要，它们分别负责不同的数据传递。modelValue属性用于接收外部传入的值,以更新组件的内部状态。
 
 ## v-if和v-show
 条件渲染与`display:none`控制
