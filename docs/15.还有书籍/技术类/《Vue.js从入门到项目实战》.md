@@ -748,3 +748,155 @@ Vue会把数组当做被观察者加入响应式系统中，`当调用一些方�
 ```
 实质上，key的存在是为DOM节点标注一个身份信息，让Vue能够有迹可循追踪到数据对应的节点。
 实战开发中，是否使用key不会影响功能的实现，不过在2.2.0+的版本中，会有警告。
+
+## Vue选项
+
+### data数据选项
+在V2中，data数据选项可接受的类型有对象和函数两种。不过我们在定义组件的时候使用函数类型。
+在V3中，所有类型必须是函数。
+```html
+<div id="app">
+  <h1>{{ title}}</h1>
+  <button-counter></button-counter>
+</div>
+<script>
+  const app = Vue.createApp({
+    data () {
+      return {
+        title: 'A Vue App'
+      }
+    }
+  })
+  app.component('button-counter', {
+    // 必须使用函数类型
+    data () {
+      return {
+        counter: 1
+      }
+    },
+    template: `
+    <button @click="counter++"> {{ counter }} timers</button>
+    `
+  });
+  app.mount('#app')
+</script>
+```
+
+在Vue中声明组件时，如果使用了对象类型的data选项，则模板将找不到在data中被声明的数据；如果使用了支持Vue模板的语法检查器，则会得到错误提示————“data property is component must be a function”
+Vue会递归的将data选项中的数据加入响应式系统，在V2中，这些数据应该是声明时即存在得到，在V3中，数据也可以在运行时声明。
+```html
+<div id="app"> 
+  <h2>{{ title }}</h2>
+  <p> {{ profile }}</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
+<script>
+  let vm = new Vue({
+    el: '#app',
+    data () {
+      return {
+        title: 'A Vue App'
+      }
+    },
+    created () {
+      Object.assign(this.$data ,{
+        profile: 'This is a Vue App'
+      })
+      console.log(this.$data);
+    }
+  })
+</script>
+```
+运行结果:
+```bash
+# <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+vue.js:5062 [Vue warn]: Property "profile" must be accessed with "$data.profile" because properties starting with "$" or "_" are not proxied in the Vue instance to prevent conflicts with Vue internals. See: https://vuejs.org/v2/api/#data
+
+(found in <Root>)
+
+# <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
+ReferenceError: profile is not defined
+    at xr.eval (eval at ac (vue.min.js:11:104187), <anonymous>:3:101)
+    at t._render (vue.min.js:11:44924)
+    at xr.r (vue.min.js:11:78772)
+    at t.get (vue.min.js:11:27616)
+    at new t (vue.min.js:11:27529)
+    at vue.min.js:11:78786
+    at xr.$mount (vue.min.js:11:79004)
+    at xr.$mount (vue.min.js:11:106346)
+    at e._init (vue.min.js:11:42495)
+    at new xr (vue.min.js:11:39571)
+```
+
+解析：title是初始化实例时在data选项中声明的数据，而profile是在created钩子函数中被赋予data选项的。Vue在处理数据时，并未把profile加入数据响应式系统。
+
+然而在V3中，profile可以被观察到。
+```html
+<div id="app">
+    <h2>{{ title }}</h2>
+    <p> {{ profile }}</p>
+</div>
+<script type="text/javascript">
+  const app = {
+    data () {
+      return {
+        title: 'A Vue App'
+      }
+    },
+    created () {
+      Object.assign(this.$data ,{
+        profile: 'This is a Vue App'
+      })
+      console.log(this.$data);
+    }
+  }
+  Vue.createApp(app).mount('#app')
+```
+
+```bash
+Proxy {title: 'A Vue App', profile: 'This is a Vue App'}
+> [[Handler]]: Object
+﹀ [[Target]]: Object
+  profile: "This is a Vue App"
+  title: "A Vue App"
+> [[Prototype]]: Object
+[[IsRevoked]]: false
+```
+
+可以用Object.assign为data选项动态绑定数据
+```js
+const app = {
+  data() {
+    return {
+      title: 'A Vue App',
+      obj: {}
+    }
+  },
+  created() {
+    Object.assign(this.obj,{
+      profile: 'This is a Vue App'
+    });
+    console.log('created', this.obj);
+  },
+  mounted() {
+    Object.assign(this.obj,{
+      profile: 'This is a Test Vue App'
+    });
+    console.log('mounted', this.obj);
+  },
+  methods: {
+    toggle () {
+      Object.assign(this.obj,{
+        profile: 'This is a Vue App for test.'
+      });
+      console.log('toggle', this.obj);
+    }
+  },
+}
+```
+TODO
+思考，`Object.assign(this.obj, { profile: '' })`与`this.obj.profile`有什么区别？
+
+>❗慎重将已有内存地址的对象或函数用于data选项
+

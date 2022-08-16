@@ -5,38 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>hi~vue</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script> -->
 </head>
 <body>
   <div id="app">
-    <h2>用户列表</h2>
-    <ul>
-      <!-- index作为第二个参数，用于标示下标 -->
-      <li v-for="(value, index) in arr">
-        {{ value }}
-      </li>
-    </ul>
-    <button @click="test">test</button>
+    <h2>{{ title }}</h2>
+    <p> {{ profile }}</p>
   </div>
 </body>
 <script type="text/javascript">
   const app = {
-    data() {
+    data () {
       return {
-        arr: [
-         1, 2, 3 
-        ]
+        title: 'A Vue App'
       }
     },
-    mounted() {
-      this.arr[3] = 4
-      this.arr[1] = 4
-    },
-    methods: {
-      test() {
-        this.arr[1] = 45
-      },
+    created () {
+      Object.assign(this.$data ,{
+        profile: 'This is a Vue App'
+      })
+      console.log(this.$data);
     }
   }
-  Vue.createApp(app).mount('#app');
+  Vue.createApp(app).mount('#app')
 </script>
 </html>
