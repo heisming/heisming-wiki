@@ -9,24 +9,35 @@
 </head>
 <body>
   <div id="app">
-    <h2>{{ title }}</h2>
-    <p> {{ profile }}</p>
+    <!-- 调用两次组件 -->
+    <color-text text="Hello World"></color-text>
+    <br>
+    <color-text></color-text>
+    <br>
+    <color-text color="#f78" text="Hello World"></color-text>
+    <br>
+    <color-text color="#43dt" text="Hello World"></color-text>
+    <br>
   </div>
 </body>
 <script type="text/javascript">
-  const app = {
-    data () {
-      return {
-        title: 'A Vue App'
+  const app = Vue.createApp({})
+  app.component('color-text', {
+    props: {
+      text: String,
+      color: {
+        type: String,
+        default: '#000',
+        required: true,
+        validator(value) {
+          return /^([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(value)
+        }
       }
     },
-    created () {
-      Object.assign(this.$data ,{
-        profile: 'This is a Vue App'
-      })
-      console.log(this.$data);
-    }
-  }
-  Vue.createApp(app).mount('#app')
+    template: `
+    <span style="{ color: color }">{{ text }}</span>
+    `
+  })
+  app.mount('#app')
 </script>
 </html>

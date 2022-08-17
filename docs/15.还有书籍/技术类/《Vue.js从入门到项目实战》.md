@@ -900,3 +900,52 @@ TODO
 
 >❗慎重将已有内存地址的对象或函数用于data选项
 
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 调用两次组件 -->
+    <button-counter></button-counter>
+    <button-counter></button-counter>
+  </div>
+</body>
+<script type="text/javascript">
+  let jack = { counter: 0 }
+  const app = Vue.createApp({})
+  app.component('button-counter', {
+    data () {
+      return jack
+      // 不要将已有内存地址的对象用于data选项，无论使用哪种方式，都是为实例的data选项分配一个新的内存地址
+      // return counter: 0
+      // return JSON.parse(JSON.stringify(jack)) // 深拷贝
+    },
+    template: `
+    <button @click="counterAdd">click {{ counter }} times</button>
+    `,
+    methods: {
+      counterAdd () {
+        this.counter++ 
+        console.log('\'click\'')
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+</html>
+```
+
+由于button-counter组件在声明时，jack对象被用作data选项的根节点，`所有实例将共享jack对象占用的地址`。
+因此，当修改一个实例的数据时，所有实例的数据都将同步更新。
+
+### 属性选项
+#### props
+
+可以是数组或者对象类型，用于接收父组件传递过来的参数，并允许开发者为其设置默认值，类型监测和校验规则
+
