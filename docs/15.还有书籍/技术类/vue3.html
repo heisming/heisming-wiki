@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>用户列表</h2>
+    <ul>
+      <!-- index作为第二个参数，用于标示下标 -->
+      <li v-for="(value, index) in arr">
+        {{ value }}
+      </li>
+      <li v-for="item of obj">{{ item }}</li>
+    </ul>
+    <button @click="test">test</button>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = {
+    data() {
+      return {
+        arr: [ 1, 2, 3 ],
+        obj: { name: '1' }
+      }
+    },
+    mounted() {
+      this.arr[3] = 4
+    },
+    methods: {
+      test() {
+        this.arr[3] = 45
+      },
+    }
+  }
+  Vue.createApp(app).mount('#app');
+</script>
+</html>
