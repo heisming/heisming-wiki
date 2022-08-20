@@ -157,3 +157,18 @@ $ npm i nrm -g --registry=http://registry.npmmirror.com
 $ npm config set registry https://registry.npmmirror.com
 ```
 
+### 坑
+
+```bash
+# 错误
+$ nvm install 16.14.0
+Node.js vv6.10.0 is not yet released or available.
+
+$ nvm ls available
+# 发现一个都没有
+$ nvm -v
+Running version 1.1.7
+# 发现不是最新版本，升级即可
+```
+
+
