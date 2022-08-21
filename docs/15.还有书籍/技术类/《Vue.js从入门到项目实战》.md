@@ -944,8 +944,107 @@ TODO
 由于button-counter组件在声明时，jack对象被用作data选项的根节点，`所有实例将共享jack对象占用的地址`。
 因此，当修改一个实例的数据时，所有实例的数据都将同步更新。
 
-### 属性选项
-#### props
+### 属性选项props
 
 可以是数组或者对象类型，用于接收父组件传递过来的参数，并允许开发者为其设置默认值，类型监测和校验规则
+
+```html
+  <div id="app">
+    <!-- 无color，默认#000 -->
+    <color-text text="Hello World"></color-text>
+    <br>
+    <!-- 无text -->
+    <color-text></color-text>
+    <br>
+    <!-- 正确 -->
+    <color-text color="#f78" text="Hello World"></color-text>
+    <br>
+    <!-- 错的color，默认#000 -->
+    <color-text color="#43dt" text="Hello World"></color-text>
+    <br>
+  </div>
+<script type="text/javascript">
+  const app = Vue.createApp({})
+  app.component('color-text', {
+    props: {
+      text: String,
+      color: {
+        type: String,
+        default: '#000',
+        required: true,
+        validator(value) {
+          return /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(value)
+        }
+      }
+    },
+    template: `
+    <span :style="{ color: color }">{{ text }}</span>
+    `
+  })
+  app.mount('#app')
+</script>
+```
+
+### 方法选项methods
+```js
+/**
+ * -----------匿名函数-----------
+ * > { msg: 'Hello World', logMsg: f }
+ * Hello World
+ */
+let store1 = {
+  msg: 'Hello World',
+  logMsg: function () {
+    console.log('-----------匿名函数-----------\n', this);
+    console.log(this.msg);
+  }
+}
+store1.logMsg();
+/**
+ * -----------箭头函数-----------
+ * > Window { postMessage: f, blur: f, focus: f, close: f, frames: window, ... }
+ * undefined
+ */
+let store2 = {
+  msg: 'Hello World',
+  logMsg: () => {
+    console.log('-----------箭头函数-----------\n', this);
+    console.log(this.msg);
+  }
+}
+```
+使用箭头函数定义方法时并不会创建函数作用域，因此this也不会指向其父级实例，此时的this会向上追踪。当找到某个函数作用域时，this将指向该函数的父级实例；否则，this将指向浏览器的内置对象Window。
+
+Q:
+```js
+let store = {
+  msg: '学习',
+  logMsg: () {
+    let store = {
+      msg: '加油',
+      logMsg: () => {
+        let store = {
+          msg: '别放弃',
+          logMsg: () => {
+            console.log(this.msg);
+          }
+        }
+        store.logMsg();
+      }
+    }
+    store.logMsg();
+  }
+}
+store.logMsg();
+```
+A：<input type="text" /> 
+>❗hint：不要使用箭头函数在其中定义方法。
+在创建组件时，methods中的方法将被绑定到Vue实例上，方法中的this也将自动指向Vue实例
+如果使用了箭头函数，this将无法正确的指向Vue实例。
+
+### 计算属性computed
+>设计初衷在于减轻模板上的业务负担，当数据链上出现复杂衍生数据时，更易维护。
+
+
+
 
