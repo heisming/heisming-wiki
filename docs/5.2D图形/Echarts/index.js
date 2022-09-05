@@ -1,4 +1,4 @@
 module.exports = {
-  title: 'canvas',
+  title: 'Echarts',
   path: '/5.2D图形/Echarts/'
 }
