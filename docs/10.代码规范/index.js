@@ -11,6 +11,10 @@ module.exports = {
       path: '/10.代码规范/JS',
     },
     {
+      title: 'TS',
+      path: '/10.代码规范/TS',
+    },
+    {
       title: '其他',
       path: '/10.代码规范/其他',
     },

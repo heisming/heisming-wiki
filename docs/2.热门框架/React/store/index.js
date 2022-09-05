@@ -3,11 +3,11 @@ module.exports = {
   children: [
     {
       title: 'MobX',
-      path: '/2.热门框架/store/MobX.md',
+      path: '/2.热门框架/Router/store/MobX.md',
     },
     {
       title: 'Redux',
-      path: '/2.热门框架/store/Redux.md',
+      path: '/2.热门框架/Router/store/Redux.md',
     },
   ]
 }
