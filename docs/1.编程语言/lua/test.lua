@@ -24,7 +24,6 @@ function timer_manager.new()
 end
 
 -- 单例模式 
-
 function timer_manager.get_instance()
 	if not instance then
 		instance = timer_manager.new()

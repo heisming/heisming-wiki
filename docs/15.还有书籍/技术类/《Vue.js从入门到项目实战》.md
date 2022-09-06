@@ -1044,7 +1044,493 @@ A：<input type="text" />
 
 ### 计算属性computed
 >设计初衷在于减轻模板上的业务负担，当数据链上出现复杂衍生数据时，更易维护。
+```html
+<div id="app" style="font-family: Roboto, sans-serif; color: rgb(84, 92, 100); margin-left: 100px;">
+    <h2>英语中的“互文”</h2>
+    <p>我们先来看三句话（代码）：</p>
+    <p>{{ message }}. &nbsp; &nbsp; 我看到的是车还是猫。</p>
+    <p>{{ message.replace(/\s/g, '') }}</p>
+    <p>{{ message.replace(/\s/g, '').split('').reverse().join('') }}</p>
+    <p>英语中也有“互文”的修辞手法，比如{{ message }}这句话，</p>
+    <p>将句中空格去掉可得{{ message.replace(/\s/g, '') }}</p>
+    <p>将句中空格去掉并将其倒序可得{{ message.replace(/\s/g, '').split('').reverse().join('') }}</p>
+    <p>可以看到， {{ message.replace(/\s/g, '') }} = {{ message.replace(/\s/g, '').split('').reverse().join('') }}，</p>
+    <p>这是互文英语的一个示例。</p>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = Vue.createApp({
+    data () {
+      return {
+        message: 'WAS IT A CAR OR A CAT I SAW'
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+```
+这么做会让代码结构十分混乱，而且当业务逻辑发生变化时，开发者还需要对所有逻辑发生的地方进行修改，代码十分不易于维护。
+```html
+  <div id="app" style="font-family: Roboto, sans-serif; color: rgb(84, 92, 100); margin-left: 100px;">
+    <h2>英语中的“互文”</h2>
+    <p>我们先来看三句话（代码）：</p>
+    <p>{{ message }}. &nbsp; &nbsp; 我看到的是车还是猫。</p>
+    <p>{{ noSpaceMsg }}</p>
+    <p>{{ palindromeMsg }}</p>
+    <p>英语中也有“互文”的修辞手法，比如{{ message }}这句话，</p>
+    <p>将句中空格去掉可得{{ noSpaceMsg }}</p>
+    <p>将句中空格去掉并将其倒序可得{{ palindromeMsg }}</p>
+    <p>可以看到， {{ noSpaceMsg }} = {{ palindromeMsg }}，</p>
+    <p>这是互文英语的一个示例。</p>
+  </div>
+<script type="text/javascript">
+  const app = Vue.createApp({
+    data () {
+      return {
+        message: 'WAS IT A CAR OR A CAT I SAW'
+      }
+    },
+    computed: {
+      noSpaceMsg () {
+        return this.message.replace(/\s/g, '')
+      },
+      palindromeMsg() {
+        return this.palindromeMsg;
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+```
+与methods一样，computed不能以箭头函数声明，同时它也会被混入Vue实例，并通过this调用。
+因为计算属性依赖于响应式属性，所以当且仅当响应式属性发生变化时，计算属性才会被重新计算，而且得到的结果将会被缓存，一直到响应式属性再次被修改。相比于使用methods函数求值。
 
+>Vue允许开发者为computed选项赋值。方法类似于定义对象属性描述符中的setter和getter。
 
+```html
+<body>
+  <div id="app">
+    <h2>数据变化之前
+      <i style="color: #ababab; font-size: 14px;">
+      *指令v-once可以限制视图不再响应式数据变化
+      </i>      
+    </h2>
+    <p v-once>{{ message }}</p>
+    <p v-once>{{ noSpaceMsg }}</p>
+    <h2>数据变化后</h2>
+    <p>{{ message }}</p>
+    <p>{{ noSpaceMsg }}</p>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = {
+    data () {
+      return {
+        message: 'WAS IT A CAR OR A CAT I SAW'
+      }
+    },
+    computed: {
+      noSpaceMsg : {
+        set (value) {
+          this.message = value
+        },
+        get () {
+          return this.message.replace(/\s/g, '')
+        }
+      },
+    },
+    mounted() {
+      this.message = 'IT MAY BE A CAT'
+    }
+  }
+  Vue.createApp(app).mount('#app')
+</script>
+<!-- // vm.message = 'i am a teacher' -->
+```
+
+### 侦听属性
+watch为实例添加被观察对象，并在对象被修改时调用开发者自定义的方法。
+```js
+const app = {
+  data () {
+    return {
+      message: 'WAS IT A CAR OR A CAT I SAW',
+      // 如果允许被赋值，何不直接放在data中？
+      noSpaceMsg: "WASITACARORACATISAW"
+    }
+  },
+  watch: {
+    // 使用watch实现，当元数据变化时，同步衍生数据的状态
+    message: (newValue, oldValue) {
+      this.noSpaceMsg = this.message.replace(/\s/g, '')
+    }
+  }
+}
+```
+>❗watch更注重于处理数据变化时的业务逻辑，而computed更注重于衍生数据，computed相比，watch还可以异步修改数据
+```js
+import axios from 'axios'
+const app = {
+  data () {
+    return {
+      message: '书山有路勤为径，学海无涯苦作舟。',
+      remoteMsg: ''
+    }
+  },
+  watch: {
+    message: (newValue, oldValue) {
+      // 发送axios请求
+      axios({
+        method: 'GET',
+        url: '/someurl',
+        params: {
+          message: newValue
+        }
+      }).then(res => {
+        this.remoteMsg = res.data.message // 接受相应后，异步修改数据值
+      })
+    }
+  }
+}
+```
+watch选项为组件异步获取Ajax请求的返回值，而使用computed则不行。
+其它的声明方式：
+```js
+const app = {
+  data() {
+    return {
+      msg: {
+        sender: 'Jack',
+        receiver: 'Rose'
+      }
+    }
+  },
+  methods: {
+    logLine () {
+      console.log('-------------- 分割线 -------------');
+    },
+    logMsg (newValue, oldValue) {
+      console.log(newValue);
+    }
+  },
+  watch: {
+    msg: {
+      handler: 'logMsg', // 方法名
+      deep: true, // 深度观察，对象任何层级数据发生变化，watch方法都会被触发
+      immediate: true // 立即调用：在侦听开始时立即调用一次watch方法
+    },
+    'msg.sender': ['logLine', 'logMsg'] // 数组方式，可调用多个方法
+  }
+}
+
+```
+
+### DOM渲染
+在V3中，只有一种标准挂在元素的方式，就是使用Vue类的mount方法，挂载目标仅限于CSS选择器或者DOM节点对象。
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+    <style>
+      .fixed-width {
+        display: inline-block;
+        width: 100px;
+      }
+    </style>
+</head>
+<body>
+  <p id="app"><strong class="fixed-width">CSS选择器：</strong>{{ msg }}</p>
+  <p id="app2"><strong class="fixed-width">DOM节点：</strong>{{ msg }}</p>
+  <p id="app3"><strong class="fixed-width">手动挂载：</strong>{{ msg }}</p>
+  <button onclick="handleMount()">手动挂载</button>
+</body>
+<script type="text/javascript">
+  Vue.createApp({
+    data() {
+      return {
+        msg:  'Hello World'
+      }
+    }
+  }).mount('#app')
+  Vue.createApp({
+    data() {
+      return {
+        msg:  'Hello World'
+      }
+    }
+  }).mount(document.getElementById('app2'));
+ const app3 = Vue.createApp({
+    data() {
+      return {
+        msg: 'Hello World'
+      }
+    }
+  });
+  const handleMount = function() {
+    app3.mount('#app3')
+  }
+</script>
+</html>
+```
+在V2中，开发组还可以在Vue对象中指定el属性并提供一个CSS选择器或DOM对象来挂载对象，V3不行。
+
+**视图中的模板字符串**
+Vue允许开发者使用字符串作为实例的模板，由template选项接收。
+```html
+<body>
+  <div id="app">target element</div>
+</body>
+<script type="text/javascript">
+  Vue.createApp({
+    template: `<h1>template element</h1>`
+  }).mount('#app')
+</script>
+```
+
+#### 渲染函数render
+render可以用于渲染视图，V3中需要调用全局函数h()来创建DOM节点
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+    <style>
+      .btn {
+        outline: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px 12px;
+      }
+      .btn-text {
+        color: #409eff;
+        background-color: transparent;
+      }
+      .btn-text:hover {
+        color: #66b1ff;
+      }
+    </style>
+</head>
+<body>
+  <div id="app">
+    <!-- 将实例中的fields & goods 传入组件中 -->
+    <fly-table :fields="fields" :goods="goods">
+      <span slot="title">Fly Table Component</span>
+    </fly-table>
+  </div>
+</body>
+<script type="text/javascript">
+  let h = Vue.h;
+  const app = Vue.createApp({
+    data () {
+      return {
+        fields: [
+          { label: '名称', prop: 'name' }, { label: '数量', prop: 'quantity' },
+          { label: '价格', prop: 'price' }, { label: '操作', prop: 'operate' },
+        ],
+        goods: [
+          { name: '苹果', quantity: 200, price: 6.9, isMarked: false },
+          { name: '西瓜', quantity: 50, price: 4.8, isMarked: false },
+          { name: '榴莲', quantity: 0, price: 22.8, isMarked: false },
+        ]
+      }
+    },
+  })
+  app.component('fly-table', {
+    props: {
+      fields: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+      goods: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+    },
+    methods: {
+      reverse() {
+        this.goods.reverse()
+      }
+    },
+    render() {
+      return h('div', {
+        // 作为子组件时的插槽名称
+        slot: 'fly-table'
+      }, [
+        h('h2', this.$slots.title),
+        h('button', {
+          // class 用于绑定类名，同v-bind:class的绑定方法
+          class: ['btn', 'btn-text'],
+          // attrs 用于绑定节点的一般属性，如id，disabled，title等
+          attrs: { disabled: false, title: '点击使数组倒序' },
+          innerText: '倒序',
+          onClick: () => {
+            // 绑定事件，使用箭头函数以免创建函数
+            this.goods.reverse()
+          },
+          // 自定义指令
+          directives: [],
+          // 其他属性
+          key: 'btnReverse',
+          ref: 'btnReverse'
+        }),
+        h('table', {
+          // style 用于绑定样式，同v-bind:style的绑定方式
+          style: {
+            width: '400px',
+            textAlign: 'left',
+            lineHeight: '42px',
+            border: '1px solid #eee',
+            userSelect: 'none'
+          }
+        }, [
+          h('tr', [ this.fields.map(filed => h('th', filed.prop)) ]),
+          this.goods.map(item => h('tr', {
+            style: { color: item.isMarked ? '#ea4335' : '' }
+          }, this.fields.map(field => h('td', {
+            style: { borderTop: '1px solid #eee' }
+          },[
+            field.prop !== 'operate' // 如果不是操作列，显示文本
+            ? h('span', item[field.prop])
+            : h('button', {
+              // 否则显示按钮
+              class: ['btn', 'btn-text'],
+              innerHTML: `<span>切换标记</span>`,
+              onClick: () => {
+                // 当按钮被点击时，切换该行文本标记状态
+                item.isMarked = !item.isMarked
+              }
+            })
+          ]))))
+        ]),
+      ])
+    }
+  })
+  app.mount('#app')
+</script>
+</html>
+```
+
+fly-table作为一个定制化功能组件，允许用户查看表格数据，倒序表格、标记表格数据等操作，其DOM渲染由render函数执行，DOM节点由全局方法h()方法创建。之后，定义了Vue实例，并在实例作用域中将数据传入组件。
+在初始渲染表格数据时，使用map方法，并使用了三目运算符判断生成span节点还是button节点。
+
+template选项和render选项均可用增加JS代码以减少HTML代码的开发。
+- 可以使开发人员聚焦于js代码
+- 更贴近Vue的底层编译器
+相对于template，render函数可以用JS完全来开发（脱离HTML和CSS的开发）
+`babel-plugin-transform-vue-jsx`插件，也可以使用JSX语法开发。
+
+render函数的回调方法createElement允许开发者在需要时为DOM节点绑定监听事件。
+在上面的例子中：`onClick: () => {}` ,那么如何绑定按键修饰符呢？
+对于一些不易编写的事件修饰符，包括`.passive`, `.capture`和`.once`，可以通过拼接字符串的方式将其绑定到事件上。
+用法如下：
+```js
+render() {
+  return Vue.h('input', {
+    onClickCapture: this.doThisInCapturingMode,
+    onKeyUpOnce: this.doThisOnce,
+    onMouseoverOnceCapture: this.doThisOnceInCapturingMode
+  })
+}
+```
+对于其他的一些事件修饰符，可以使用原生JS编写
+| 修饰符 | 原生JS |
+| ---- | ---- |
+| .stop | event.stopPropagation() |
+| .prevent | event.preventDefault() |
+| .self | if(event.target !== event.currentTarget) return |
+| .enter/.13 | if(event.keyCode !== 13) return |
+| .ctrl | if(!event.ctrlKey) return |
+
+```js
+render() {
+  return Vue.h('input', {
+    onKeyUp: event => {
+      // 若发送事件的元素是非绑定的事件，则略过
+      if(event.target !== event.currentTarget) return
+      // 若按键并非回车键(B)或Shift键未被按住，则略过
+      if(event.shiftKey || event.keyCode !== 13) return
+      // 停止传送事件
+      event.stopPropagation();
+      // 阻止该元素的默认事件处理器
+      event.preventDefault();
+      // ...
+    }
+  })
+}
+```
+>拓展
+在HTML中，任何内容都是节点，即使没有标签的文本也是节点，层层节点嵌套，形成一颗DOM树。
+
+[fly-table DOM](./assets/drawio/fly-table.drawio ':include :type=code')
+
+在DOM中查询和更新节点是一件比较低效的工作，为此，Vue提供了render函数与虚拟DOM。虚拟DOM将对真实的DOM发生的变化进行追踪，以降低DOM查询用时。
+```js
+render() {
+  return h('p', 'Hello World')
+}
+```
+与document.createElement不同，render中的h创建的并不是真实的DOM节点，而是虚拟节点(Virtual Node, VNode)，含有自定义描述的节点信息。由VNode组成的树形结构即虚拟DOM。Vue将通过虚拟DOM在页面上渲染出真实的DOM。
+> 在树组件中，VNode必须保持身份唯一，以便Vue对每个真的DOM节点进行追踪。
+
+#### 优先级
+mount、template、render三个选项功能一样，获取实例模板（指定或创建）。如果同时存在呢？
+```html
+<body>
+  <div id="app">
+    <h1>el: {{ msg }}</h1>
+  </div>
+</body>
+<script type="text/javascript">
+  let h = Vue.h;
+  const app = Vue.createApp({
+    render() {
+      return h('h1', 'render: ' + this.msg)
+    },
+    template: `<h1>template: {{ msg }}</h1>`,
+    data () {
+      return {
+        msg: 'I want you!'
+      }
+    }
+  }) 
+  app.mount('#app')
+</script>
+```
+> 🚩render胜出
+
+mount、template
+```html
+<body>
+  <div id="app">
+    <!-- mount -->
+    <h1>el: {{ msg }}</h1>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = Vue.createApp({
+    template: `<h1>template: {{ msg }}</h1>`,
+    data () {
+      return {
+        msg: 'I want you!'
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+```
+> 🚩template胜出
+
+### 封装复用
 
 
