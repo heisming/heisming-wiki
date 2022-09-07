@@ -1532,5 +1532,28 @@ mount、template
 > 🚩template胜出
 
 ### 封装复用
+#### 自定义指令
+内置：v-bind，v-on,v-model等等，在组件和实例这些自定义指令应该被声明在directives选项中。
+Vue为自定义指令提供了以下的钩子函数（可选）
+- beforeMount: 指令与元素绑定时调用。
+- mounted: 指定绑定的元素被挂载到父元素上时调用。
+- updated: 指令所在VNode及其子VNode全部更新后调用。
+- unmounted: 指令与元素解绑时调用。
 
+同时钩子函数会被传入以下参数。
+- el: 指令所绑定元素，可用于操作DOM
+- binding: 包含指令相关属性的对象。
+  - name: 指令名称
+  - value: 指令绑定的值，如在v-some="2*2"中，绑定值为4
+  - oldValue: 指令值改变前的值，仅在update和componentUpdated钩子函数中可用。
+  - expression: 字符串类型的指令表达式，如在v-some="2*2"中，值为2*2
+  - arg: 传给指令的参数，如在v-some:someValue中，值为"someValue"
+  - modifiers: 修饰符对象，如在v-some.upper中，值为{upper: true}
+  - vnode: 虚拟节点
+  - oldNode: 虚拟节点更新前的值，仅在`updated和componentUpdated`钩子函数中可用
+
+demo:
+```
+
+```
 
