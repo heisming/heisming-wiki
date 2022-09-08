@@ -8,63 +8,26 @@
 </head>
 <body>
   <div id="app">
-    <h1 v-some.upper>{{ title }}</h1>
-    <h1 v-some.lower>{{ title }}</h1>
-    <div>----------- 我是分割线 ----------------</div>
-    <h1 v-style="style">{{ title }}</h1>
-    <button @click="handleStyle">修改v-style</button>
+    <easy-title></easy-title>
+    <easy-wish></easy-wish>
+    <easy-motto></easy-motto>
   </div>
 </body>
 <script type="text/javascript">
+  let EasyTitle = {
+    name: 'EasyTitle',
+    template: `<h1>大器当成</h1>`
+  }
+  let EasyMotto = {
+    name: 'EasyMotto',
+    template: `<p>过一方水土，历一番人事，方知天地不仁，万物刍狗</p>`
+  }
+  let EasyWish = {
+    name: 'EasyWish',
+    template: `<p>白发渔樵隐深山，浮名穷利启源沾。</p>`
+  }
   const app = Vue.createApp({
-    data () {
-      return {
-        title: 'Test for Directive',
-        style: {
-          // v-style的参数
-          fontStyle: 'italic'
-        }
-      }
-    },
-    methods: {
-      handleStyle() {
-        Object.assign(this.style, {
-          color: '#abffff',
-          transform: 'rotateX(45deg)'
-        })
-      }
-    },
-    directives: {
-      style: {
-        // 用于节点绑定样式
-        beforeMount(el, binding, vnode) {
-          console.log('%c----bind参数:  el, binding, vnode ----', 'font-size: 18px');
-          console.log('%o\n\n%o\n%o', el, binding, vnode);
-          let styles = binding.value; // 获取指令绑定的值
-          Object.keys(styles).forEach(key => el.style[key] = styles[key])
-        },
-        updated(el, binding, vnode, oldVnode) {
-          console.log('%c----updated参数:  el, binding, vnode, oldVnode ----', 'color: red');
-          console.log('%o\n\n%o\n\n%o\n\n%o', el, binding, vnode, oldVnode);
-          let styles = binding.value; // 获取指令绑定的值
-          Object.keys(styles).forEach(key => el.style[key] = styles[key])
-        },
-      },
-      // 在beforeMount和updated时触发相同行为，且无须定义其他钩子函数
-      // 指定可以简写为以下形式
-      some(el, binding) {
-        let text = el.innerText;
-        let modifiers = binding.modifiers;
-        // 如果带有upper后缀，则大写文本
-        if (modifiers.upper) {
-          el.innerText  = text.toUpperCase();
-        }
-        // 如果带有lower后缀，则小写文本
-        if (modifiers.lower) {
-          el.innerText  = text.toLowerCase();
-        }          
-      }
-    },
+    components: { EasyTitle, EasyMotto, EasyWish }
   })
   app.mount('#app')
 </script>
