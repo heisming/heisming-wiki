@@ -1532,5 +1532,170 @@ mount、template
 > 🚩template胜出
 
 ### 封装复用
+#### 自定义指令
+内置：v-bind，v-on,v-model等等，在组件和实例这些自定义指令应该被声明在directives选项中。
+Vue为自定义指令提供了以下的钩子函数（可选）
+- beforeMount: 指令与元素绑定时调用。
+- mounted: 指定绑定的元素被挂载到父元素上时调用。
+- updated: 指令所在VNode及其子VNode全部更新后调用。
+- unmounted: 指令与元素解绑时调用。
 
+同时钩子函数会被传入以下参数。
+- el: 指令所绑定元素，可用于操作DOM
+- binding: 包含指令相关属性的对象。
+  - name: 指令名称
+  - value: 指令绑定的值，如在v-some="2*2"中，绑定值为4
+  - oldValue: 指令值改变前的值，仅在update和componentUpdated钩子函数中可用。
+  - expression: 字符串类型的指令表达式，如在v-some="2*2"中，值为2*2
+  - arg: 传给指令的参数，如在v-some:someValue中，值为"someValue"
+  - modifiers: 修饰符对象，如在v-some.upper中，值为{upper: true}
+  - vnode: 虚拟节点
+  - oldNode: 虚拟节点更新前的值，仅在`updated和componentUpdated`钩子函数中可用
 
+demo:
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1 v-some.upper>{{ title }}</h1>
+    <h1 v-some.lower>{{ title }}</h1>
+    <div>----------- 我是分割线 ----------------</div>
+    <h1 v-style="style">{{ title }}</h1>
+    <button @click="handleStyle">修改v-style</button>
+  </div>
+</body>
+<script type="text/javascript">
+  const app = Vue.createApp({
+    data () {
+      return {
+        title: 'Test for Directive',
+        style: {
+          // v-style的参数
+          fontStyle: 'italic'
+        }
+      }
+    },
+    methods: {
+      handleStyle() {
+        Object.assign(this.style, {
+          color: '#abffff',
+          transform: 'rotateX(45deg)'
+        })
+      }
+    },
+    directives: {
+      style: {
+        // 用于节点绑定样式
+        beforeMount(el, binding, vnode) {
+          console.log('%c----bind参数:  el, binding, vnode ----', 'font-size: 18px');
+          console.log('%o\n\n%o\n%o', el, binding, vnode);
+          let styles = binding.value; // 获取指令绑定的值
+          Object.keys(styles).forEach(key => el.style[key] = styles[key])
+        },
+        updated(el, binding, vnode, prevVnode) {
+          console.log('%c----updated参数:  el, binding, vnode, prevVnode ----', 'color: red');
+          console.log('%o\n\n%o\n\n%o\n\n%o', el, binding, vnode, prevVnode);
+          let styles = binding.value; // 获取指令绑定的值
+          console.log("🚀 ~ file: vue3.html ~ line 44 ~ beforeMount ~ binding.value", binding.value)
+          Object.keys(styles).forEach(key => el.style[key] = styles[key])
+        },
+      },
+      // 在beforeMount和updated时触发相同行为，且无须定义其他钩子函数
+      // 指定可以简写为以下形式
+      some(el, binding) {
+        let text = el.innerText;
+        let modifiers = binding.modifiers;
+        // 如果带有upper后缀，则大写文本
+        if (modifiers.upper) {
+          el.innerText  = text.toUpperCase();
+        }
+        // 如果带有lower后缀，则小写文本
+        if (modifiers.lower) {
+          el.innerText  = text.toLowerCase();
+        }          
+      }
+    },
+  })
+  app.mount('#app')
+</script>
+</html>
+```
+v-some根据后缀的`.upper`或`.lower`修饰符对文本进行大小写格式化。
+v-style接收一个样式对象，用于为节点绑定样式。
+在自定义指令中，最大的关注点是beforeMount和updated这两个钩子函数，这两个钩子函数的业务逻辑在很多时候基本一致，而其他钩子函数只有特殊情况下才会用到。
+因此，Vue为自定义指令提供了简写形式，只关注beforeMount和updated这两个钩子函数(如v-some)。
+
+同filter一样，可以定义全局指令：
+```js
+ // 用于节点绑定样式
+  app.directive('style', {
+    beforeMount: function(el, binding, vnode) {
+      console.log('%c--------- bind参数: el, binding, vnode ---------', 'font-size: 18px');
+      console.log('%o\n\n%o\n%o', el, binding, vnode);
+      let styles = binding.value; // 获取指令绑定的值
+      Object.keys(styles).forEach(key => el.style[key] = styles[key])
+    },
+    updated: function (el, binding, vnode, prevVnode) {
+      console.log('%c----updated参数:  el, binding, vnode, prevVnode ----', 'color: red');
+      console.log('%o\n\n%o\n\n%o\n\n%o', el, binding, vnode, prevVnode);
+      let styles = binding.value; // 获取指令绑定的值
+      Object.keys(styles).forEach(key => el.style[key] = styles[key])
+    }
+  })
+  // 在beforeMount和updated时触发相同行为，且无须定义其他钩子函数
+  // 指定可以简写为以下形式
+  app.directive('some', function (el, binding) {
+    let text = el.innerText;
+    let modifiers = binding.modifiers;
+    // 如果带有upper后缀，则大写文本
+    if (modifiers.upper) {
+      el.innerText  = text.toUpperCase();
+    }
+    // 如果带有lower后缀，则小写文本
+    if (modifiers.lower) {
+      el.innerText  = text.toLowerCase();
+    }          
+  })
+```
+
+#### 组件的注册
+components选项用于为组件注册从外部引入的组件。由于子组件并非在全局定义，其不可以直接在父组件的作用域内使用。选项常见的应用场景有引第三方库中的组件、自定义组件等等。
+```html
+<body>
+  <div id="app">
+    <easy-title></easy-title>
+    <easy-wish></easy-wish>
+    <easy-motto></easy-motto>
+  </div>
+</body>
+<script type="text/javascript">
+  let EasyTitle = {
+    name: 'EasyTitle',
+    template: `<h1>大器当成</h1>`
+  }
+  let EasyMotto = {
+    name: 'EasyMotto',
+    template: `<p>过一方水土，历一番人事，方知天地不仁，万物刍狗</p>`
+  }
+  let EasyWish = {
+    name: 'EasyWish',
+    template: `<p>白发渔樵隐深山，浮名穷利启源沾。</p>`
+  }
+  const app = Vue.createApp({
+    components: { EasyTitle, EasyMotto, EasyWish }
+  })
+  app.mount('#app')
+</script>
+```
+
+定义了EasyTitle, EasyMotto, EasyWish三个组件，并使用components选项将其注册到实例中。
+> 可以使用vue-devtools看到组件结构
+
+#### mixins
