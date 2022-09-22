@@ -1,5 +1,6 @@
 # SVG
-> [掘金](https://juejin.cn/post/7124312346947764260#heading-80)
+> [掘金](https://juejin.cn/post/7124312346947764260)
+> [掘金2](https://juejin.cn/post/7118985770408345630)
 > [mdn](https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial)
 
 ## 简介
