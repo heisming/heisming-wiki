@@ -1472,7 +1472,7 @@ render() {
 >拓展
 在HTML中，任何内容都是节点，即使没有标签的文本也是节点，层层节点嵌套，形成一颗DOM树。
 
-[fly-table DOM](./assets/drawio/fly-table.drawio ':include :type=code')
+[fly-table DOM](../assets/drawio/fly-table.drawio ':include :type=code')
 
 在DOM中查询和更新节点是一件比较低效的工作，为此，Vue提供了render函数与虚拟DOM。虚拟DOM将对真实的DOM发生的变化进行追踪，以降低DOM查询用时。
 ```js
@@ -1699,3 +1699,114 @@ components选项用于为组件注册从外部引入的组件。由于子组件�
 > 可以使用vue-devtools看到组件结构
 
 #### mixins
+与components选项相似，mixins选项也用于注册在外部封装好的代码，不过这些代码更加碎片化。
+目的在于灵活地分发组件中一些可复用的功能。
+
+mixins可以将一些封装好的选项混入另一个组件中。在混入过程中，如果没有发生冲突，则执行合并；
+如果发生冲突且用户没有指定解决策略，Vue将采用默认策略：
+| 冲突选项 | 合并策略 | 冲突策略 |
+| ---- | ---- | ---- |
+| data | 合并根节点数据 | 优先采用组件的数据 |
+| mounted等钩子函数 | 混合为数组 | 全部调用且先调用mixin的钩子函数 |
+| methods、components、directives等 | 混为同一对象 | 优先采用组件的键值对 |
+| watch | 混合为数组 | 全部调用且先调用mixin的watch方法 |
+
+```html
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi~vue</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+    <style>
+      #app {
+        color: #2c3e50;
+        font-family: Roboto, sans-serif;
+      }
+      .label {
+        display: inline-block;
+        min-width: 160px;
+      }
+    </style>
+</head>
+<body>
+  <div id="app">
+    <h1>{{ title }}</h1>
+    <p><strong class="label">Text:</strong>{{ text }}</p>
+    <p><strong class="label">Plus Text:</strong>{{ plusText }}</p>
+    <p><strong class="label">Upper Text:</strong>{{ upperText }}</p>
+    <button @click="toggleText">切换文本</button>
+  </div>
+</body>
+<script type="text/javascript">
+  // 强耦合，需要被混入组件的data根节点包含text属性
+  let mixin = {
+    data () {
+      return {
+        title: 'Text for mixin'
+      }
+    },
+    mounted() {
+      console.log('mixin mounted');
+    },
+    methods: {
+      toggleText() {
+        this.text = 'mixin text'
+      }
+    },
+    computed: {
+      plusText () {
+        // 此处需要创建函数作用域以使this指向Vue实例
+        return '+ ' + this.text + ' +'
+      },
+      upperText() {
+        return this.text.toUpperCase()
+      }
+    },
+    watch: {
+      text(value) {
+        console.log('mixin text:' + value);
+      }
+    }
+  }
+  const app = Vue.createApp({
+    mixins: [mixin],
+    data () {
+      return {
+        title: 'A Title',
+        text: 'which one?'
+      }
+    },
+    mounted() {
+      console.log('instance method');
+    },
+    methods: {
+      toggleText() {
+        this.text = 'instance text'
+      }
+    },
+    watch: {
+      text (value) {
+        console.log('instance text: ' + value);
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+</html>
+```
+定义名为mixin的混入并将其注入Vue的实例中。
+```console
+mixin mounted
+vue3.html:68 instance method
+```
+组件合并了mixin混入的选项。在处理data选项冲突时，Vue选用了组件数据；在处理mounted钩子函数时，Vue先行调用mixin的钩子函数，同时，Vue也将mixin中的computed选项合并到组件中。
+
+当点击“切换文本”按钮时，mixin与组件watch方法都被调用。Vue处理策略与处理mounted等钩子函数相同。
+```console
+mixin text:instance text
+vue3.html:77 instance text: instance text
+```
+
+Vue允许使用Vue.mixin定义全局mixin，这会导致所有组件和示例混入mixin选项，导致混乱。

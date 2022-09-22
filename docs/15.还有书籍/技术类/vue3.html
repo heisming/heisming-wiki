@@ -4,30 +4,50 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>hi~vue</title>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"> -->
     <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.37/vue.global.js"></script>
+    <style>
+      .list-move {
+        transition: transform 1s;
+      }
+    </style>
 </head>
 <body>
   <div id="app">
-    <easy-title></easy-title>
-    <easy-wish></easy-wish>
-    <easy-motto></easy-motto>
+    <button @click="orderByRandom()">随机顺序</button>
+    <br>
+    <transition-group name="list" tag="ul">
+      <li v-for="item in list" :key="item">{{ item }}</li>
+    </transition-group>
   </div>
 </body>
 <script type="text/javascript">
-  let EasyTitle = {
-    name: 'EasyTitle',
-    template: `<h1>大器当成</h1>`
-  }
-  let EasyMotto = {
-    name: 'EasyMotto',
-    template: `<p>过一方水土，历一番人事，方知天地不仁，万物刍狗</p>`
-  }
-  let EasyWish = {
-    name: 'EasyWish',
-    template: `<p>白发渔樵隐深山，浮名穷利启源沾。</p>`
-  }
   const app = Vue.createApp({
-    components: { EasyTitle, EasyMotto, EasyWish }
+    data () {
+      return {
+        // list: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        list: [0, 1, 2, 3, 4]
+      }
+    },
+    methods: {
+      // 随机改变数组元素的位置
+      orderByRandom() {
+        // 初始化新数组
+        let temp = []
+        for (let i = 0; i < this.list.length; i++) {
+          let num = Math.floor(Math.random() * (this.list.length - 0.001))
+          // 随机新元素
+          // 当元素不在数组中时，将其加入到数组中
+          let index = temp.indexOf(num) 
+          while(index !== -1) {
+            num = Math.floor(Math.random() * (this.list.length - 0.001))
+            index = temp.indexOf(num)
+          }
+          temp.push(num)
+        }
+        this.list = temp
+      }
+    }
   })
   app.mount('#app')
 </script>
