@@ -507,3 +507,26 @@ const list = mainStore().getList();
 
 ```
 
+### 后续补充
+[setup](https://pinia.vuejs.org/zh/core-concepts/#setup-stores)函数式写法(组合式API)
+```ts
+import { defineStore } from "pinia";
+import { ref } from 'vue'
+
+const useAppStore = defineStore('app', () => {
+  // state
+  const token = ref('')
+
+  // getter
+  const tokenWithName = computed(() => `HEISMING${token.value}` )
+
+  // action
+  function change() {
+    token.value = 'token is ready'
+  } 
+
+  return { token, tokenWithName, change }
+})
+
+export default useAppStore
+```
