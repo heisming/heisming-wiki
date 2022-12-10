@@ -65,7 +65,13 @@ git pull origin main --allow-unrelated-histories
 git push -u origin main
 ```
 
-
+## 痛点2：一台电脑同时提交gitlab和github
+> 仓库地址前面的可以自定义名称
+```shell
+git remote add gitlab-origin 'gitlab仓库地址'
+git remote add gitee-origin 'gitee仓库地址'
+git remote add github-origin 'github仓库地址'
+```
 
 ## Git基本(指针)
 
