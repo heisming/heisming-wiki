@@ -4,7 +4,7 @@ module.exports = {
   children: [
     {
       title: '《Vue.js设计与实现》',
-    path: '/15.还有书籍/《Vue.js设计与实现》.md'
+      path: '/15.还有书籍/《Vue.js设计与实现》.md'
     }
   ]
 }
