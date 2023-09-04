@@ -1,0 +1,47 @@
+<mxfile host="65bd71144e">
+    <diagram name="Page-1" id="c4acf3e9-155e-7222-9cf6-157b1a14988f">
+        <mxGraphModel dx="817" dy="349" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="86" value="VScode Debugger" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#51CFE4;fontColor=#000000;strokeColor=#001DBC;" parent="1" vertex="1">
+                    <mxGeometry x="74" y="120" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="89" value="Node.js" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4BB04F;fontColor=#000000;strokeColor=#001DBC;" parent="1" vertex="1">
+                    <mxGeometry x="644" y="119" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" value="Debug Adapter&lt;br&gt;Protocol" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#000000;fillColor=#FFFFAA;size=14;" parent="1" vertex="1">
+                    <mxGeometry x="214" y="179" width="120" height="51" as="geometry"/>
+                </mxCell>
+                <mxCell id="93" value="Node.js Debug Apapter" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FEB749;fontColor=#000000;strokeColor=#001DBC;" vertex="1" parent="1">
+                    <mxGeometry x="359" y="119" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="94" value="" style="endArrow=classic;startArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="86" target="93">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="214" y="160" as="sourcePoint"/>
+                        <mxPoint x="264" y="110" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="98" value="调试适配器协议" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="94">
+                    <mxGeometry x="0.1613" y="-1" relative="1" as="geometry">
+                        <mxPoint x="-16" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="95" value="" style="endArrow=classic;startArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="93" target="89">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="559" y="149.5" as="sourcePoint"/>
+                        <mxPoint x="784" y="149.5" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="99" value="调试协议" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="95">
+                    <mxGeometry x="-0.2131" y="1" relative="1" as="geometry">
+                        <mxPoint x="24" y="1" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="97" value="Chorme DevTools Protocol" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#000000;fillColor=#FFFFAA;size=16;" vertex="1" parent="1">
+                    <mxGeometry x="514" y="179" width="120" height="50" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -1,0 +1,39 @@
+<mxfile host="65bd71144e">
+    <diagram name="Page-1" id="c4acf3e9-155e-7222-9cf6-157b1a14988f">
+        <mxGraphModel dx="817" dy="349" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="86" value="Chorme DevTools frontend" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#51CFE4;fontColor=#000000;strokeColor=#001DBC;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="120" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="87" value="ws&amp;nbsp;客户端" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#FECDD2;" parent="1" vertex="1">
+                    <mxGeometry x="142" y="153" width="70" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="89" value="JS Runtime" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4BB04F;fontColor=#000000;strokeColor=#001DBC;" parent="1" vertex="1">
+                    <mxGeometry x="591" y="30" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="88" value="ws&amp;nbsp;服务端" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#FECDD2;" parent="1" vertex="1">
+                    <mxGeometry x="541" y="70" width="70" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" value="Chorme &lt;br&gt;DevTools Protocol" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#000000;fillColor=#FFFFAA;" parent="1" vertex="1">
+                    <mxGeometry x="340" y="162" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="91" value="Node.js&lt;br&gt;Chromium&lt;br&gt;v8" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fontColor=#000000;fillColor=#FFFFAA;" parent="1" vertex="1">
+                    <mxGeometry x="585" y="133" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="92" value="" style="endArrow=classic;startArrow=classic;html=1;fontColor=#000000;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="87" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="150" as="sourcePoint"/>
+                        <mxPoint x="540" y="90" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="93" value="&lt;font style=&quot;font-size: 13px;&quot; color=&quot;#ffffff&quot;&gt;调试协议&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#000000;" parent="92" vertex="1" connectable="0">
+                    <mxGeometry x="0.0627" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
