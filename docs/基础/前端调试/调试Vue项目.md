@@ -75,3 +75,37 @@ export default {
 
 然后在 VSCode Debugger 里看看这个路径：
 ![](assets/img/vue_debugger_callback.png)
+
+发现是`D:\front-end\console\vuecli-debug\src\App.vue?91a0`
+本地明显没这个文件，所以就只读了。
+其实这个路径已经做过了映射，就是完成了从 `webpack://vuecli-debug/src/App.vue?91a0` 到 `D:\front-end\console\vuecli-debug\src\App.vue?91a0` 的映射。
+
+看一下 sourceMapPathOverrides 默认这三条配置，很容易看出是最后一条做的映射：
+```json
+ "sourceMapPathOverrides": {
+    "meteor://💻app/*": "${workspaceFolder}/*",
+    "webpack:///./~/*": "${workspaceFolder}/node_modules/*",
+    "webpack://?:*/*": "${workspaceFolder}/*"
+  }
+```
+但问题就出现在后面多了一个 ?hash 的字符串，导致路径不对了。
+
+那为什么会多这样一个 hash 呢？
+
+这是因为 vue cli 默认的 devtool 设置是 **eval-cheap-module-source-map**，前面讲过，eval 是每个模块用 eval 包裹，并且通过 sourceURL 指定文件路径，通过 sourceMappingURL 指定 sourcemap。
+
+在 Chrome DevTools 里点击下面的 source map from 的 url：
+![](assets/img/sourcemap_form_url.png)
+
+会发现先映射到了一个中间文件：
+![](assets/img/sourcemap_form_file.png)
+
+这个是被 eval 包裹并指定了 sourceURL 的模块代码，会被 Chrome DevTools 当作文件加到 sources 里。
+
+这里有两个 sourceURL，第一个 sourceURL 在 sourceMappingURL 之前，这样 sourcemap 映射到的就是这个 url，也就是被 Chrome DevTools 当作文件的路径。而第二个 sourceURL 在之后，它可以修改当前文件的 url，也就是在调试工具里展示的路径。
+
+然后再点击，会跳转回 bundle 的代码：
+
+
+
+
