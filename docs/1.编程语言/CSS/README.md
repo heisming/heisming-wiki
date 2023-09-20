@@ -171,7 +171,7 @@ h3.spec {
 
 ​	a:link=a:visited => **a:hover** => a:active (各自单独使用除外)
 
-​	a:hover必须置于a:link和a:visited之后，才有效，a:active必须在a：hover之后，才有效。而link、visited两个伪类之间顺序无所谓，谁在前都可以。
+​	a:hover必须置于a:link和a:visited之后，才有效，a:active必须在a:hover之后，才有效。而link、visited两个伪类之间顺序无所谓，谁在前都可以。
 
 ```html
 <div>
@@ -591,7 +591,7 @@ a::after {
 
 ​      举例：#div .p span权值是（1，1，1），span权值是（0，0，1），div p span权值是（0，0，3），#div p span权值是（1，0，2）
 
-​				  所以111>001>003>102
+​				  所以111>102>003>001
 
 ​	 注意：`!important`提升至最大权重，可以写在属性后面。（很少使用）
 
