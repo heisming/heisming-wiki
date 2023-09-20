@@ -633,7 +633,7 @@ a::after {
   color: blue;
 }
 /* 全都权重失效，带有继承性，离p标签最近 */
-.box01 .0box2 .0box3{
+.box01 .box02 .box03{
   color: green;
 }
 ```
