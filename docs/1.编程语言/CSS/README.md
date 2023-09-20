@@ -629,11 +629,11 @@ a::after {
 .box01 #box02 {
   color: red;
 }
-#box01 #box02{
+#box01 #box02 {
   color: blue;
 }
-/* 全都权重失效，带有继承性，离p标签最近 */
-.box01 .box02 .box03{
+/* 没有带<p>标签全都权重失效，带有继承性，离p标签最近 */
+.box01 .box02 .box03 {
   color: green;
 }
 ```
