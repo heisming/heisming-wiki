@@ -47,7 +47,30 @@ Docker是内核级别的虚拟化，一个物理机上可以运行很多的容�
 **仓库(repository)**：存储镜像的地方，分为公有仓库（国内阿里云。华为云等等）和私有仓库。
 
 ### 环境
+#### 操作系统
 Liunx：Ubantu 20.04
+```Bash
+# 系统内核版本
+heisming@heisming:~$ uname -r
+5.13.0-39-generic
+# 系统版本
+heisming@heisming:~$ cat /etc/os-release 
+NAME="Ubuntu"
+VERSION="20.04.6 LTS (Focal Fossa)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 20.04.6 LTS"
+VERSION_ID="20.04" 
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+```
+
+#### 安装
+
 
 
 ```bash
