@@ -52,21 +52,34 @@ Liunx：Ubantu 20.04
 ```Bash
 # 系统内核版本
 heisming@heisming:~$ uname -r
-5.13.0-39-generic
+# 5.13.0-39-generic
+6.5.0-28-generic
 # 系统版本
 heisming@heisming:~$ cat /etc/os-release 
+# NAME="Ubuntu"
+# VERSION="20.04.6 LTS (Focal Fossa)"
+# ID=ubuntu
+# ID_LIKE=debian
+# PRETTY_NAME="Ubuntu 20.04.6 LTS"
+# VERSION_ID="20.04" 
+# HOME_URL="https://www.ubuntu.com/"
+# SUPPORT_URL="https://help.ubuntu.com/"
+# BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+# PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+# VERSION_CODENAME=focal
+# UBUNTU_CODENAME=focal
+PRETTY_NAME="Ubuntu 22.04.4 LTS"
 NAME="Ubuntu"
-VERSION="20.04.6 LTS (Focal Fossa)"
+VERSION_ID="22.04"
+VERSION="22.04.4 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
 ID=ubuntu
 ID_LIKE=debian
-PRETTY_NAME="Ubuntu 20.04.6 LTS"
-VERSION_ID="20.04" 
 HOME_URL="https://www.ubuntu.com/"
 SUPPORT_URL="https://help.ubuntu.com/"
 BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
 PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
-VERSION_CODENAME=focal
-UBUNTU_CODENAME=focal
+UBUNTU_CODENAME=jammy
 ```
 
 #### 安装
