@@ -83,22 +83,128 @@ UBUNTU_CODENAME=jammy
 ```
 
 #### 安装
-
-
-
+[安装官网](https://docs.docker.com/engine/install/ubuntu/)
 ```bash
-# 查看系统版本
-[root@VM-16-9-centos etc]# cat /proc/version
-Linux version 3.10.0-1160.31.1.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-44) (GCC) ) #1 SMP Thu Jun 10 13:32:12 UTC 2021
-# 查看Docker版本
-docker --version
+### 0.卸载旧版本和冲突
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+### 1.设置Docker的 apt 存储库。
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-# https://github.com/docker/docker-install
-[root@VM-16-9-centos etc]# curl -fsSL https://get.docker.com -o get-docker.sh
-[root@VM-16-9-centos etc]# sh get-docker.sh
-[root@VM-16-9-centos etc]# docker --version
-Docker version 20.10.17, build 100c701
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+### 2.安装Docker包
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+### 3.运行命令行检查Docker Engine是否安装成功  hello-world Image。
+liming@liming-virtual-machine:~$ sudo docker run hello-world
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+c1ec31eb5944: Pull complete 
+Digest: sha256:a26bff933ddc26d5cdf7faa98b4ae1e3ec20c4985e6f87ac0973052224d24302
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+
+# 查看docker是否启动
+liming@liming-virtual-machine:~$ sudo docker version 
+Client: Docker Engine - Community
+ Version:           26.1.1
+ API version:       1.45
+ Go version:        go1.21.9
+ Git commit:        4cf5afa
+ Built:             Tue Apr 30 11:47:53 2024
+ OS/Arch:           linux/amd64
+ Context:           default
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          26.1.1
+  API version:      1.45 (minimum version 1.24)
+  Go version:       go1.21.9
+  Git commit:       ac2de55
+  Built:            Tue Apr 30 11:47:53 2024
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.6.31
+  GitCommit:        e377cd56a71523140ca6ae87e30244719194a521
+ runc:
+  Version:          1.1.12
+  GitCommit:        v1.1.12-0-g51d5e94
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+
+# 查看 hello-world 镜像
+liming@liming-virtual-machine:~$ sudo docker images
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+hello-world   latest    d2c94e258dcb   12 months ago   13.3kB
+
 ```
+#### 卸载Docker引擎
+```bash
+# 卸载Docker Engine、CLI、containd和Docker Compose包:
+sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+
+# 不会自动删除主机上的映像、容器、卷或自定义配置文件。需要手动删除所有镜像、容器和卷。
+sudo rm -rf /var/lib/docker
+sudo rm -rf /var/lib/containerd
+
+# 必须手动删除任何已编辑的配置文件。
+```
+#### 镜像加速
+[加速器地址](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors)：https://bow9383g.mirror.aliyuncs.com
+```BASH
+
+# 安装1.10.0以上版本的Docker客户端
+# 配置镜像加速器
+# 可以通过修改daemon配置文件/etc/docker/daemon.json来使用加速器
+liming@liming-virtual-machine:~$ sudo mkdir -p /etc/docker
+liming@liming-virtual-machine:~$ sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://bow9383g.mirror.aliyuncs.com"]
+}
+EOF
+liming@liming-virtual-machine:~$ sudo systemctl daemon-reload
+liming@liming-virtual-machine:~$ sudo systemctl restart docker
+```
+#### 复盘HelloWorld启动流程
+[Run的运行流程分析图](../assets/drawio/findImage.drawio ':include :type=code')
+
+#### 底层原理
+**Docker如何工作？**
+C/S结构系统，守护进程运行在主机上。通过Socket从C端访问，DS接收到DC的指令，就会执行这个命令！
+
+
 
 ## Docker命令
 
