@@ -204,6 +204,25 @@ liming@liming-virtual-machine:~$ sudo systemctl restart docker
 **Docker如何工作？**
 C/S结构系统，守护进程运行在主机上。通过Socket从C端访问，DS接收到DC的指令，就会执行这个命令！
 
+<!-- [模拟环境](../assets/drawio/dockerModel.drawio ':include :type=code') -->
+![模拟环境](https://img-blog.csdnimg.cn/ef9f3be8f9ff459a8a764f2f72763b9d.png)
+
+**Docker为什么比VM快？**
+- Docker有着比虚拟机更少的抽象层
+![抽象层](https://pic2.zhimg.com/v2-e34ed29488f0c5ab693d85c50e175e59_r.jpg)
+- Docker是利用的宿主机的内核，VM是需要GuestOS
+- 新建一个容器的时候，Docker是不需要像虚拟机一样重新加载一个操作系统内核，可以避免引导。虚拟机是加载GuestOS，分钟级别；Docker是利用宿主机的操作系统，省略复杂过程，秒级启动！
+
+| - | Docker容器|LXC|VM|
+|----|----|----|---|
+|虚拟化类型|OS虚拟化|OS虚拟化|硬件虚拟化|
+|性能|=物理机性能|=物理机性能|5%-20%损耗|
+|隔离性|NS隔离|NS隔离|强|
+|QoS|Cgroup弱|Cgroup弱|强|
+|安全性|中|差|强|
+|GuestOS|只支持Linux|只支持Linux|全部|
+|可迁移性|强|弱|强|
+
 
 
 ## Docker命令
