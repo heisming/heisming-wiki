@@ -223,15 +223,17 @@ C/S结构系统，守护进程运行在主机上。通过Socket从C端访问，D
 |GuestOS|只支持Linux|只支持Linux|全部|
 |可迁移性|强|弱|强|
 
-
-
 ## Docker命令
+
 
 ## Docker镜像👍👍👍
 
+
 ## 容器数据卷
 
+
 ## DockerFile👍👍👍👍👍
+
 
 ## Docker网络原理
 
