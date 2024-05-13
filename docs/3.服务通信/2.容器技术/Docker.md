@@ -335,6 +335,26 @@ sudo docker rmi -f $(docker images -aq)
 ```
 
 ### 容器命令
+说明：有了镜像才可以创建容器，linux：下载一个ubuntu镜像来测试学习
+```bash
+# 下载ubuntu镜像命令
+docker pull ubuntu
+```
+新建容器并启动
+```bash
+docker run 
+
+# 参数说
+--name="Name"  # 容器名字，用区分
+-d             # 后台方式运行
+-it            # 使用交互方式运行，进入容器查看内容
+-p             # 指定容器的端口 -p 8080:8080
+    -P ip:主机端口：容器端口
+    -p 主机端口：容器端口（常用）
+    -p 容器端口
+    容器端口
+-P             # 随机指定端口
+```
 
 
 ## Docker镜像👍👍👍
