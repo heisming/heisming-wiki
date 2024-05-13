@@ -224,6 +224,117 @@ C/S结构系统，守护进程运行在主机上。通过Socket从C端访问，D
 |可迁移性|强|弱|强|
 
 ## Docker命令
+帮助命令: https://docs.docker.com/reference/cli/docker/
+```bash
+docker version # 显示版本信息
+docker info #显示系统信息，包括镜像和容器数量
+docker 命令 --help #万金油
+```
+
+### 镜像命令
+[`docker images`](https://docs.docker.com/reference/cli/docker/image/ls/)：查看本地主机上所有镜像 
+
+```bash
+liming@liming-virtual-machine:~$ sudo docker images
+[sudo] liming 的密码： 
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+hello-world   latest    d2c94e258dcb   12 months ago   13.3kB
+
+# 解释
+REPOSITORY 镜像的仓库源
+TAG 镜像的标签
+IMAGE ID 镜像的ID
+CREATED 镜像的创建时间
+SIZE 镜像的大小
+
+# 可选项
+Options:
+  -a, --all             #默认列出所有镜像
+  -q, --quiet           #只显示镜像的ID
+```
+
+`docker search`：搜索镜像
+```bash
+liming@liming-virtual-machine:~$ sudo docker search mysql
+NAME                            DESCRIPTION                                      STARS     OFFICIAL
+mysql                           MySQL is a widely used, open-source relation…   15066     [OK]
+mariadb                         MariaDB Server is a high performing open sou…   5747      [OK]
+# ...
+
+# 可选项 --help
+Options:
+  -f, --filter filter   Filter output based on conditions provided
+      --format string   Pretty-print search using a Go template
+      --limit int       Max number of search results
+      --no-trunc        Don't truncate output
+
+# 通过搜索来过滤 --filter=STARS=3000
+liming@liming-virtual-machine:~$ sudo docker search mysql --filter=STARS=3000
+NAME      DESCRIPTION                                      STARS     OFFICIAL
+mysql     MySQL is a widely used, open-source relation…   15066     [OK]
+mariadb   MariaDB Server is a high performing open sou…   5747      [OK]
+
+```
+`docker pull`：下载镜像
+```bash
+liming@liming-virtual-machine:~$ sudo docker pull mysql
+Using default tag: latest #如果不写tag,默认就是latest
+latest: Pulling from library/mysql
+72a69066d2fe: Pull complete  # 分层下载，docker image的核心，联合文件系统
+93619dbc5b36: Pull complete 
+99da31dd6142: Pull complete 
+626033c43d70: Pull complete 
+37d5d7efb64e: Pull complete 
+ac563158d721: Pull complete 
+d2ba16033dad: Pull complete 
+688ba7d5c01a: Pull complete 
+00e060b6d11d: Pull complete 
+1c04857f594f: Pull complete 
+4d7cfa90e6ea: Pull complete 
+e0431212d27d: Pull complete 
+Digest: sha256:e9027fe4d91c0153429607251656806cc784e914937271037f7738bd5b8e7709 # 签名
+Status: Downloaded newer image for mysql:latest 
+docker.io/library/mysql:latest # 真实地址
+
+# 等价 docker pull mysql === docker pull docker.io/library/mysql:latest
+
+# 指定版本下载
+liming@liming-virtual-machine:~$ sudo docker pull mysql:5.7
+5.7: Pulling from library/mysql
+72a69066d2fe: Already exists # 联合文件系统
+93619dbc5b36: Already exists 
+99da31dd6142: Already exists 
+626033c43d70: Already exists 
+37d5d7efb64e: Already exists 
+ac563158d721: Already exists 
+d2ba16033dad: Already exists 
+0ceb82207cd7: Pull complete 
+37f2405cae96: Pull complete 
+e2482e017e53: Pull complete 
+70deed891d42: Pull complete 
+Digest: sha256:f2ad209efe9c67104167fc609cca6973c8422939491c9345270175a300419f94
+Status: Downloaded newer image for mysql:5.7
+docker.io/library/mysql:5.7
+```
+`docker rmi`：删除镜像
+```bash
+# 删除指定的容器
+docker rmi -f 容器ID
+# 删除多个的容器
+docker rmi -f 容器ID 容器ID 容器ID 
+liming@liming-virtual-machine:~$ sudo docker rmi -f c20987f18b13 
+Untagged: mysql:5.7
+Untagged: mysql@sha256:f2ad209efe9c67104167fc609cca6973c8422939491c9345270175a300419f94
+Deleted: sha256:c20987f18b130f9d144c9828df630417e2a9523148930dc3963e9d0dab302a76
+Deleted: sha256:6567396b065ee734fb2dbb80c8923324a778426dfd01969f091f1ab2d52c7989
+Deleted: sha256:0910f12649d514b471f1583a16f672ab67e3d29d9833a15dc2df50dd5536e40f
+Deleted: sha256:6682af2fb40555c448b84711c7302d0f86fc716bbe9c7dc7dbd739ef9d757150
+Deleted: sha256:5c062c3ac20f576d24454e74781511a5f96739f289edaadf2de934d06e910b92
+# 删除全部容器（未成功）
+sudo docker rmi -f $(docker images -aq)
+```
+
+### 容器命令
 
 
 ## Docker镜像👍👍👍
