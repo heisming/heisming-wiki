@@ -349,11 +349,75 @@ docker run
 -d             # 后台方式运行
 -it            # 使用交互方式运行，进入容器查看内容
 -p             # 指定容器的端口 -p 8080:8080
-    -P ip:主机端口：容器端口
+    -p ip:主机端口：容器端口
     -p 主机端口：容器端口（常用）
     -p 容器端口
     容器端口
 -P             # 随机指定端口
+
+# 测试：启动并进入容器
+liming@liming-virtual-machine:~$ docker run -it ubuntu /bin/bash
+root@d62a9d781ac5:/# 
+root@d62a9d781ac5:/# ls # 查看容器内的ubuntu，基础版本，很多命令不完善
+bin  boot  dev  etc  home  lib  lib32  lib64  libx32  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+```
+列出所有的运行中的容器
+```bash
+# docker ps 命令
+-a # 列出当前正在运行的容器，带出历史运行过的容器
+-n=? # 显示最近创建的容器
+-q # 只显示容器的编号
+liming@liming-virtual-machine:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+liming@liming-virtual-machine:~$ docker ps -a
+CONTAINER ID   IMAGE         COMMAND       CREATED          STATUS                       PORTS     NAMES
+d62a9d781ac5   ubuntu        "/bin/bash"   10 minutes ago   Exited (127) 8 minutes ago             nervous_goldberg
+7661fd7bb9b6   hello-world   "/hello"      6 days ago       Exited (0) 6 days ago                  distracted_khayyam
+
+liming@liming-virtual-machine:~$ sudo docker ps -a -n=1
+CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                        PORTS     NAMES
+d62a9d781ac5   ubuntu    "/bin/bash"   12 minutes ago   Exited (127) 10 minutes ago             nervous_goldberg
+
+```
+退出容器
+```bash
+exit # 直接容器停止并退出
+
+Ctrl + P + Q # 容器不停止退出
+
+liming@liming-virtual-machine:~$ sudo docker run -it ubuntu /bin/bash
+root@c7b53ca53a14:/# 
+# Ctrl + P + Q
+liming@liming-virtual-machine:~$ 
+liming@liming-virtual-machine:~$ sudo docker ps
+CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS          PORTS     NAMES
+c7b53ca53a14   ubuntu    "/bin/bash"   18 seconds ago   Up 17 seconds             compassionate_blackwell
+```
+删除容器
+```bash
+docker rm 容器id # 删除指定的容器，不能删除正在运行的容器，如果要强制删除 rm -f
+docker rm -f $(docker ps -aq) # 删除所有的容器
+docker ps -a -q|xargs docker rm # 删除所有的容器
+```
+启动和停止容器的操作
+```bash
+docker start 容器id # 启动容器
+docker restart 容器id # 重启容器
+docker stop 容器id # 停止当前正在运行的容器
+docker kill 容器id # 强制终止当前容器
+```
+#### 常用的其它命令
+后台启动容器
+```bash
+# 命令 docker run -d 镜像名
+liming@liming-virtual-machine:~$ docker run -d ubuntu
+e3b33ead40a79b9a6890a471827b0b9dcf59c417580334b9efd36cc199e180b1
+# 问题docker ps, 发现ubuntu停止了
+liming@liming-virtual-machine:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+# 常见的坑，docker 容器使用后台运行
 ```
 
 
