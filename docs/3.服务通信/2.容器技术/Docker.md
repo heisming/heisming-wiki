@@ -417,9 +417,318 @@ e3b33ead40a79b9a6890a471827b0b9dcf59c417580334b9efd36cc199e180b1
 liming@liming-virtual-machine:~$ docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
-# 常见的坑，docker 容器使用后台运行
+# 常见的坑，docker 容器使用后台运行，就必须要有一个前台进程，docker检测没有就会自动停止
+# ngnix：容器启动后，发现没有提供服务，就会立刻停止，就没有程序了
+```
+查看日志
+```bash
+Usage:  docker logs [OPTIONS] CONTAINER-ID
+Options:
+      --details        Show extra details provided to logs
+  -f, --follow         Follow log output
+      --since string   Show logs since timestamp (e.g. "2013-01-02T13:23:37Z") or relative (e.g. "42m" for 42 minutes)
+  -n, --tail string    Number of lines to show from the end of the logs (default "all")
+  -t, --timestamps     Show timestamps
+      --until string   Show logs before a timestamp (e.g. "2013-01-02T13:23:37Z") or relative (e.g. "42m" for 42 minutes)
+
+liming@liming-virtual-machine:~$ sudo docker logs -t c7b53ca53a14
+2024-05-14T14:35:09.193818659Z root@c7b53ca53a14:/# exit
+
+liming@liming-virtual-machine:~$ sudo docker logs -n --tail c7b53ca53a14
+root@c7b53ca53a14:/# exit
+```
+查看容器中进程信息
+```bash
+liming@liming-virtual-machine:~$ sudo docker top c7b53ca53a14
+Error response from daemon: container c7b53ca53a141dcfbc2bd41a7d5136db3e5b929765c13bb93aba097b0d2ba065 is not running
+# 提示没有运行
+liming@liming-virtual-machine:~$ sudo docker run -it ubuntu /bin/bash
+root@0d67609f92b2:/# 
+# Ctrl + P + Q (重复执行了3次...)
+CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS          PORTS     NAMES
+c0a90380aa84   ubuntu    "/bin/bash"   43 seconds ago   Up 41 seconds             practical_curie
+e64cc95701f9   ubuntu    "/bin/bash"   48 seconds ago   Up 46 seconds             recursing_jang
+0d67609f92b2   ubuntu    "/bin/bash"   58 seconds ago   Up 57 seconds             infallible_montalcini
+# 查看到了
+liming@liming-virtual-machine:~$ sudo docker top 0d67609f92b2
+UID         PID       PPID       C        STIME          TTY          TIME            CMD
+root       27274      27253      0        20:34          pts/0        00:00:00      /bin/bash
+# UID用户ID，PID是进程ID，PPID是父进程ID。
 ```
 
+查看镜像元数据
+```bash
+liming@liming-virtual-machine:~$ sudo docker inspect 0d67609f92b2
+[
+    {
+        "Id": "0d67609f92b2f350903c1b79807d8bc3c829e49ce70e64eaf7d27e2fdec258c5",
+        "Created": "2024-05-15T12:34:33.457732544Z",
+        "Path": "/bin/bash", # 控制台
+        "Args": [], # 传递的参数
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 27274,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2024-05-15T12:34:33.908709165Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:ba6acccedd2923aee4c2acc6a23780b14ed4b8a5fa4e14e252a23b846df9b6c1", # 镜像源
+        "ResolvConfPath": "/var/lib/docker/containers/0d67609f92b2f350903c1b79807d8bc3c829e49ce70e64eaf7d27e2fdec258c5/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/0d67609f92b2f350903c1b79807d8bc3c829e49ce70e64eaf7d27e2fdec258c5/hostname",
+        "HostsPath": "/var/lib/docker/containers/0d67609f92b2f350903c1b79807d8bc3c829e49ce70e64eaf7d27e2fdec258c5/hosts",
+        "LogPath": "/var/lib/docker/containers/0d67609f92b2f350903c1b79807d8bc3c829e49ce70e64eaf7d27e2fdec258c5/0d67609f92b2f350903c1b79807d8bc3c829e49ce70e64eaf7d27e2fdec258c5-json.log",
+        "Name": "/infallible_montalcini",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "docker-default",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "bridge",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                34,
+                205
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/66a2fa0c08628f88a4399915d9ef110cf16d5b2facb001c9ed20072f575f2349-init/diff:/var/lib/docker/overlay2/62902bbae3b4111016a5625788da0ae0a0b6a90f54273be6b945090b32128cdd/diff",
+                "MergedDir": "/var/lib/docker/overlay2/66a2fa0c08628f88a4399915d9ef110cf16d5b2facb001c9ed20072f575f2349/merged",
+                "UpperDir": "/var/lib/docker/overlay2/66a2fa0c08628f88a4399915d9ef110cf16d5b2facb001c9ed20072f575f2349/diff",
+                "WorkDir": "/var/lib/docker/overlay2/66a2fa0c08628f88a4399915d9ef110cf16d5b2facb001c9ed20072f575f2349/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [], # 挂载
+        "Config": {
+            "Hostname": "0d67609f92b2",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": true,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": true,
+            "OpenStdin": true,
+            "StdinOnce": true,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "/bin/bash"
+            ],
+            "Image": "ubuntu",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {}
+        },
+        "NetworkSettings": { # 网络
+            "Bridge": "",
+            "SandboxID": "5d4e8551da726314ab4727bb4cf8539c16fc79e0a5e435c752a1a68142f8e804",
+            "SandboxKey": "/var/run/docker/netns/5d4e8551da72",
+            "Ports": {},
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "83d9ceb57ffde90d68ce43c9d731eed0d552be540dc76b4288ad8d4a66b92ce5",
+            "Gateway": "172.17.0.1",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "172.17.0.2",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "MacAddress": "02:42:ac:11:00:02",
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "02:42:ac:11:00:02",
+                    "NetworkID": "a8eaeb1a39e39eb146500a0f6358248347c8f73498a1725b3d485cd95a57d6c2",
+                    "EndpointID": "83d9ceb57ffde90d68ce43c9d731eed0d552be540dc76b4288ad8d4a66b92ce5",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DriverOpts": null,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]
+
+```
+
+进入当前正在运行的容器
+```bash
+# 我们通常容器都是使用后台方式运行的，需要进入容器，修改配置
+docker exec -it 容器id bashShell
+# 测试
+liming@liming-virtual-machine:~$ sudo  docker ps
+CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS          PORTS     NAMES
+c0a90380aa84   ubuntu    "/bin/bash"   10 minutes ago   Up 10 minutes             practical_curie
+e64cc95701f9   ubuntu    "/bin/bash"   10 minutes ago   Up 10 minutes             recursing_jang
+0d67609f92b2   ubuntu    "/bin/bash"   10 minutes ago   Up 10 minutes             infallible_montalcini
+liming@liming-virtual-machine:~$ sudo docker exec -it c0a90380aa84 /bin/bash
+root@c0a90380aa84:/# 
+root@c0a90380aa84:/# ps -ef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 12:34 pts/0    00:00:00 /bin/bash
+root          10       0  0 12:45 pts/1    00:00:00 /bin/bash
+root          19      10  0 12:45 pts/1    00:00:00 ps -ef
+
+# 方式二
+# 新建一个ubuntu容器，进行2秒循环打印 docker is good!；❗谨慎执行
+liming@liming-virtual-machine:~$ sudo docker run -d ubuntu /bin/bash -c "while true;do echo docker is good\!;sleep 2;done"
+abba2dd31285af78bb646d1826c2947637fad528d2b96605bc36093da0307d24 # 容器ID
+liming@liming-virtual-machine:~$ sudo docker ps
+CONTAINER ID   IMAGE     COMMAND                   CREATED          STATUS          PORTS     NAMES
+abba2dd31285   ubuntu    "/bin/bash -c 'while…"   56 seconds ago   Up 56 seconds             priceless_wilbur
+c0a90380aa84   ubuntu    "/bin/bash"               24 minutes ago   Up 24 minutes             practical_curie
+e64cc95701f9   ubuntu    "/bin/bash"               24 minutes ago   Up 24 minutes             recursing_jang
+0d67609f92b2   ubuntu    "/bin/bash"               24 minutes ago   Up 24 minutes             infallible_montalcini
+
+# 命令
+docker attach 容器id
+liming@liming-virtual-machine:~$ sudo docker attach abba2dd31285
+docker is good!
+docker is good!
+docker is good!
+docker is good!
+docker is good!
+docker is good!
+...
+# 正在执行当前的代码
+
+# docker exec 进入容器后开启一个新的终端，可以在里面操作。
+# docker attach # 进入容器当前正在执行的终端，不会启动新的进程！
+```
+从容器内拷贝文件到主机上
+```bash
+docker cp 容器id:容器内路径 目的的主机路径
+
+# 测试
+liming@liming-virtual-machine:~$ sudo docker ps
+CONTAINER ID   IMAGE     COMMAND                   CREATED          STATUS          PORTS     NAMES
+abba2dd31285   ubuntu    "/bin/bash -c 'while…"   7 minutes ago    Up 7 minutes              priceless_wilbur
+c0a90380aa84   ubuntu    "/bin/bash"               30 minutes ago   Up 30 minutes             practical_curie
+e64cc95701f9   ubuntu    "/bin/bash"               31 minutes ago   Up 31 minutes             recursing_jang
+0d67609f92b2   ubuntu    "/bin/bash"               31 minutes ago   Up 31 minutes             infallible_montalcini
+# 进入容器内部正在运行的命令行
+liming@liming-virtual-machine:/home$ sudo docker attach c0a90380aa84
+root@c0a90380aa84:/# cd /home
+root@c0a90380aa84:/home# touch copy.js
+root@c0a90380aa84:/home# ls
+copy.js
+root@c0a90380aa84:/home# exit
+# 拷贝文件不需要容器正在运行中，因为容器停止其中的文件也存在
+# 拷贝文件到主机
+liming@liming-virtual-machine:/home$ sudo docker cp c0a90380aa84:/home/copy.js /home
+Successfully copied 1.54kB to /home
+liming@liming-virtual-machine:/home$ ls
+copy.js  liming  liming.js
+```
+#### 命令小结
+![docker命令图](https://img-blog.csdnimg.cn/img_convert/06a539a30efc11ba47aa2767e15ce912.png)
 
 ## Docker镜像👍👍👍
 
