@@ -1,5 +1,6 @@
-# Docker安装Nginx
+# Docker安装Nginx、Tomcat、ES+Kibana
 
+## Nginx
 [官方文档](https://hub.docker.com/_/nginx)
 ```bash
 liming@liming-virtual-machine:~$ sudo docker search nginx
@@ -65,6 +66,29 @@ Commercial support is available at
 </body>
 </html>
 
-# 
-
+# 进入nginx
+liming@liming-virtual-machine:~$ sudo docker exec -it nginx01 /bin/bash
+# 找配置文件
+root@d204870addab:/# whereis nginx
+nginx: /usr/sbin/nginx /usr/lib/nginx /etc/nginx /usr/share/nginx
+root@d204870addab:/# cd /etc/nginx 
+root@d204870addab:/etc/nginx# ls
+conf.d	fastcgi_params	mime.types  modules  nginx.conf  scgi_params  uwsgi_params
+root@d204870addab:/etc/nginx# exit
+exit
+# 停止服务，就无法访问了
+liming@liming-virtual-machine:~$ sudo docker stop d204870addab
+d204870addab
 ```
+端口暴露的概念
+[端口暴露](../assets/drawio/nginx.drawio ':include :type=code')
+
+> 思考：每次改动nginx配置文件，都需要进入容器内部改动十分玛法，可以在容器外部听一个映射路径，达到容器外部修改文件，容器内部就可以自动修改。 -v 数据卷技术
+
+## Tomcat
+
+
+
+### ES+Kibana
+
+
