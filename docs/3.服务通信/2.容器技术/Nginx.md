@@ -156,11 +156,41 @@ mysql         latest    3218b38490ce   2 years ago     516MB
 ubuntu        latest    ba6acccedd29   2 years ago     72.8MB
 liming@liming-virtual-machine:~$ sudo docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+# 启动容器服务
+liming@liming-virtual-machine:~$ sudo docker run -d -p 3355:8080 --name tomcat01 tomcat:9.0
+833a58dd8aa88c598260dcdc8418e05a3e440f59b487302c2146e5778d3a9b96
+liming@liming-virtual-machine:~$ sudo docker ps
+CONTAINER ID   IMAGE        COMMAND             CREATED              STATUS              PORTS                                       NAMES
+833a58dd8aa8   tomcat:9.0   "catalina.sh run"   About a minute ago   Up About a minute   0.0.0.0:3355->8080/tcp, :::3355->8080/tcp   tomcat01
+# 打开防火墙
+liming@liming-virtual-machine:~$ sudo ufw allow 3355
+防火墙规则已更新
+规则已更新(v6)
 
+liming@liming-virtual-machine:~$ sudo service docker restart
 
+liming@liming-virtual-machine:~$ sudo docker start tomcat01
+tomcat01
 
+# localhost:3355是404，因为目录没有默认的配置文件
+
+# 进入容器
+liming@liming-virtual-machine:~$ sudo docker exec -it tomcat01 /bin/bash
+root@833a58dd8aa8:/usr/local/tomcat# cd webapps
+root@833a58dd8aa8:/usr/local/tomcat# ls
+# 空的
+# 发现问题， 1.linux命令少了。 2. 没有webapps。阿里云镜像的原因，默认是最小的镜像，所有不必要的都剔除掉。
+# 保证最小可运行环境
+root@833a58dd8aa8:/usr/local/tomcat# cd webapps.dist
+root@833a58dd8aa8:/usr/local/tomcat/webapps.dist# ls
+ROOT  docs  examples  host-manager  manager
+root@833a58dd8aa8:/usr/local/tomcat/webapps.dist# cd ..
+root@833a58dd8aa8:/usr/local/tomcat# cp -r webapps.dist/* webapps
+root@833a58dd8aa8:/usr/local/tomcat# cd webapps
+root@833a58dd8aa8:/usr/local/tomcat/webapps# ls
+ROOT  docs  examples  host-manager  manager
+# localhost:3355 访问就有tomcat页面了
 ```
-
 
 ### ES+Kibana
 
