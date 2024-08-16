@@ -194,4 +194,14 @@ ROOT  docs  examples  host-manager  manager
 
 ### ES+Kibana
 
+> es 暴露的端口很多！
+> es 十分的耗内存
+> es 的数据一般需要放置到安全
+```bash
+# $ docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:tag
+# 启动 elasticsearch
+liming@liming-virtual-machine:~$ docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.6.2
+Unable to find image 'elasticsearch:7.6.2' locally
+
+```
 
