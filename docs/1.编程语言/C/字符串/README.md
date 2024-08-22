@@ -10,7 +10,7 @@ char site[7] = { 'R', 'U', 'N', 'O', 'O', 'B', '\0' };
 char site[] = "RUNOOB";
 ```
 以下是 `C/C++` 中定义的字符串的内存表示：
-![STRING](https://www.runoob.com/wp-content/uploads/2014/09/c-strings-2020-12-21.png)
+![string](https://www.runoob.com/wp-content/uploads/2014/09/c-strings-2020-12-21.png)
 
 不需要把 null 字符放在字符串常量的末尾。C 编译器会在初始化数组时，自动把 \0 放在字符串的末尾。
 ```c

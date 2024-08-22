@@ -22,7 +22,7 @@ int main()
 ```bash
 num 变量的地址： 0x7ffd9702d514
 ```
-![p](https://www.runoob.com/wp-content/uploads/2014/09/c-pointer.png)
+![pointer](https://www.runoob.com/wp-content/uploads/2014/09/c-pointer.png)
 > 什么是内存地址以及如何访问它
 
 ## 什么是指针
