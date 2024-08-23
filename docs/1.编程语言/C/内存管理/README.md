@@ -1,1 +1,131 @@
-#
+# 内存管理
+> 在 C 语言中，内存是通过指针变量来管理的。
+
+C 语言提供了一些函数和运算符，使得程序员可以对内存进行操作，包括分配、释放、移动和复制等。
+
+|方法|操作|
+|----|----|
+|void *calloc(int num, int size);| 在内存中动态地分配 num 个长度为 size 的连续空间，并将每一个字节都初始化为 0。所以它的结果是分配了 num*size 个字节长度的内存空间，并且每个字节的值都是 0。|
+|void free(void *address);|该函数释放 address 所指向的内存块,释放的是动态分配的内存空间。|
+|void *malloc(int num);|在堆区分配一块指定大小的内存空间，用来存放数据。这块内存空间在函数执行完成后不会被初始化，它们的值是未知的。|
+|void *realloc(void *address, int newsize);|该函数重新分配内存，把内存扩展到 newsize|
+
+>❗`void *`类型表示未确定类型的指针。`C、C++`规定 `void *`类型可以通过**类型转换强制转**换为任何其它类型的指针。
+
+## 动态分配内存
+编程时，如果预先知道数组的大小，那么定义数组时就比较容易。
+
+`char name[100];`: 存储100个字符的人名
+
+那么如果不知道呢？那就需要定义一个指针，**该指针指向未定义所需内存大小的字符，后续再根据需求来分配内存**。
+
+看下面的例子
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main()
+{
+	char name[100];
+	char *description;
+	
+	strcpy(name, "Barry Lee");
+	
+	// malloc: void * 类型可以通过类型转换强制转换为任何其它类型的指针。
+	description = (char *)malloc(200 * sizeof(char)); // 动态分配内存
+  description = (char *)calloc(200, sizeof(char)); // calloc方法分配
+	if (description == NULL)
+	{
+		fprintf(stderr, "Error - unable to allocate required memory\n");
+	}
+	else
+	{
+		strcpy(description, "Barry Lee a DPS student in class 10th");
+	}
+	
+	printf("Name = %s\n", name);   
+	printf("Description = %s\n", description);
+
+   	return 0;
+}
+```
+编译并执行
+```bash
+Name = Barry Lee
+Description = Barry Lee a DPS student in class 10th
+```
+
+> 当动态分配内存时，有完全控制权，**可以传递任何大小的值**。而那些预先定义了大小的数组，一旦定义则无法改变大小。
+
+## 重新调整内存的大小和释放内存
+> 当程序退出时，操作系统会自动释放所有分配给程序的内存
+
+**建议在不需要内存时，都应该调用函数 `free()` 来释放内存。**
+
+```C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main()
+{
+	char name[100];
+	char *description;
+	
+	strcpy(name, "Barry Lee");
+	
+	// 动态分配内存
+	description = (char *)malloc(30 * sizeof(char));
+	if (description == NULL)
+	{
+		fprintf(stderr, "Error - unable to allocate required memory\n");
+	}
+	else
+	{
+		strcpy(description, "Barry Lee a DPS student.");
+	}
+	
+	// 假设需要储存更大的描述信息
+	description = (char *)realloc(description, 100 * sizeof(char));
+	if (description == NULL)
+	{
+		fprintf(stderr, "Error - unable to allocate required memory\n");
+	}
+	else
+	{
+		strcat(description, "She is in class 10th");
+	}
+	printf("Name = %s\n", name);   
+	printf("Description = %s\n", description);
+	/* 使用 free() 函数释放内存 */
+   	free(description);
+   	return 0;
+}
+```
+编译并执行
+```bash
+Name = Barry Lee
+Description = Barry Lee a DPS student.She is in class 10th
+```
+不重新分配额外的内存，`strcat()` 函数会生成一个错误，因为存储 `description` 时可用的内存不足。
+```bash
+malloc(): corrupted top size
+/usr/bin/timeout: the monitored command dumped core 
+Aborted
+```
+
+## 常用的内存管理函数和运算符
+|类型|内容|说明|
+|-|-|-|
+|函数|malloc()|用于动态分配内存。它接受一个参数，即需要分配的内存大小（以字节为单位），并返回一个指向分配内存的指针。|
+|函数|free()|用于释放先前分配的内存。它接受一个指向要释放内存的指针作为参数，并将该内存标记为未使用状态。|
+|函数|calloc()|用于动态分配内存，并将其初始化为零。它接受两个参数，即需要分配的内存块数和每个内存块的大小（以字节为单位），并返回一个指向分配内存的指针。|
+|函数|realloc()|用于重新分配内存。它接受两个参数，即一个先前分配的指针和一个新的内存大小，然后尝试重新调整先前分配的内存块的大小。如果调整成功，它将返回一个指向重新分配内存的指针，否则返回一个空指针。|
+|函数|memcpy()|用于从源内存区域复制数据到目标内存区域。它接受三个参数，即目标内存区域的指针、源内存区域的指针和要复制的数据大小（以字节为单位）。|
+|函数|memmove()|类似于 `memcpy()` 函数，但它可以处理重叠的内存区域。它接受三个参数，即目标内存区域的指针、源内存区域的指针和要复制的数据大小（以字节为单位）。|
+|运算符|sizeof|用于获取数据类型或变量的大小（以字节为单位）。|
+|运算符|指针|用于获取指针所指向的内存地址或变量的值。|
+|运算符|&|用于获取变量的内存地址。|
+|运算符|*|用于获取指针所指向的变量的值。|
+|运算符|-> |用于指针访问结构体成员，语法为 `pointer->member`，等价于 `(*pointer).member`。|
