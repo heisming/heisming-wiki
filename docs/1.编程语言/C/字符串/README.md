@@ -95,8 +95,6 @@ strstr(str2, str4):  oogle
 ```c
 #include <string.h>
 ```
-> 头文件定义了一个变量类型、一个宏和各种操作字符数组的函数。
-> 
 > 提供了一组用于**处理字符串和内存块的函数**。这些函数涵盖了字符串复制、连接、比较、搜索和内存操作等。
 
 ### void *memchr
@@ -143,11 +141,11 @@ int memcmp(const void *str1, const void *str2, size_t n)
 
 int main()
 {
-	char str1[15];	
+	char str1[15];
 	char str2[15];
 	int ret;
 	
-	memcpy(str1, "abcdef", 6);	
+	memcpy(str1, "abcdef", 6);
 	memcpy(str2, "ABCDEF", 6);
 	
 	ret = memcmp(str1, str2, 5);
