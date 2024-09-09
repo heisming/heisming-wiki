@@ -236,7 +236,6 @@ docker 命令 --help #万金油
 
 ```bash
 liming@liming-virtual-machine:~$ sudo docker images
-[sudo] liming 的密码： 
 REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
 hello-world   latest    d2c94e258dcb   12 months ago   13.3kB
 
@@ -726,7 +725,7 @@ liming@liming-virtual-machine:/home$ sudo docker cp c0a90380aa84:/home/copy.js /
 Successfully copied 1.54kB to /home
 liming@liming-virtual-machine:/home$ ls
 copy.js  liming  liming.js
-```
+```3
 #### 命令小结
 ![docker命令图](https://img-blog.csdnimg.cn/img_convert/06a539a30efc11ba47aa2767e15ce912.png)
 

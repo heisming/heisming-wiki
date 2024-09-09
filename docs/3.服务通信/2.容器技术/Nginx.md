@@ -198,10 +198,85 @@ ROOT  docs  examples  host-manager  manager
 > es 十分的耗内存
 > es 的数据一般需要放置到安全
 ```bash
+# --net somenetwork  网络配置（暂时不用）
+# -p 9200:9200  9200 是es的端口， 9300 是kibana的端口
+
 # $ docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:tag
 # 启动 elasticsearch
 liming@liming-virtual-machine:~$ docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.6.2
 Unable to find image 'elasticsearch:7.6.2' locally
+7.6.2: Pulling from library/elasticsearch
+ab5ef0e58194: Pull complete 
+c4d1ca5c8a25: Pull complete 
+941a3cc8e7b8: Pull complete 
+43ec483d9618: Pull complete 
+c486fd200684: Pull complete 
+1b960df074b2: Pull complete 
+1719d48d6823: Pull complete 
+Digest: sha256:1b09dbd93085a1e7bca34830e77d2981521a7210e11f11eda997add1c12711fa
+Status: Downloaded newer image for elasticsearch:7.6.2
+b38f70464ddfda4fe59fe28e8f036d525a9cb879d7caa476d3ef67f53628a89b
+liming@liming-virtual-machine:~$ sudo docker ps
+CONTAINER ID   IMAGE                 COMMAND                   CREATED          STATUS          PORTS                                                                                  NAMES
+b38f70464ddf   elasticsearch:7.6.2   "/usr/local/bin/dock…"   38 seconds ago   Up 36 seconds   0.0.0.0:9200->9200/tcp, :::9200->9200/tcp, 0.0.0.0:9300->9300/tcp, :::9300->9300/tcp   elasticsearch
 
+# 测试es是否成功了
+liming@liming-virtual-machine:~$ curl localhost:9200
+{
+  "name" : "b38f70464ddf",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "lIelpVMkTPaW94ipju1QXg",
+  "version" : {
+    "number" : "7.6.2",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "ef48eb35cf30adf4db14086e8aabd07ef6fb113f",
+    "build_date" : "2020-03-26T06:34:37.794943Z",
+    "build_snapshot" : false,
+    "lucene_version" : "8.4.0",
+    "minimum_wire_compatibility_version" : "6.8.0",
+    "minimum_index_compatibility_version" : "6.0.0-beta1"
+  },
+  "tagline" : "You Know, for Search"
+}
+
+# 查看es的内存占用情况
+liming@liming-virtual-machine:~$ sudo docker stats
+CONTAINER ID   NAME            CPU %     MEM USAGE / LIMIT     MEM %     NET I/O       BLOCK I/O         PIDS
+b38f70464ddf   elasticsearch   3.34%     1.237GiB / 3.778GiB   32.75%    8.26kB / 0B   2.08MB / 1.93MB   43
+
+# es是十分耗内存(1G+)的，所以一般不建议使用docker部署。
+
+liming@liming-virtual-machine:~$ sudo docker stop b38f70464ddf
+b38f70464ddf
+
+# 可以增加内存的限制，修改配置文件 -e 环境配置修改
+# -e ES_JAVA_OPTS="-Xms64m -Xmx512m"：最小64m，最大512m
+liming@liming-virtual-machine:~$ docker run -d --name elasticsearch-min -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e ES_JAVA_OPTS="-Xms64m -Xmx512m" elasticsearch:7.6.2
+41ed0b9db9fc2bc842d628269e12e6b631ebd047066e2ada6a867da05638f624
+liming@liming-virtual-machine:~$ sudo docker stats
+CONTAINER ID   NAME                CPU %     MEM USAGE / LIMIT   MEM %     NET I/O       BLOCK I/O         PIDS
+41ed0b9db9fc   elasticsearch-min   2.15%     364MiB / 3.778GiB   9.41%     3.26kB / 0B   10.5MB / 1.05MB   43
+liming@liming-virtual-machine:~$ curl localhost:9200
+{
+  "name" : "41ed0b9db9fc",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "On4ghh1XTg-e6XjfB-nD8A",
+  "version" : {
+    "number" : "7.6.2",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "ef48eb35cf30adf4db14086e8aabd07ef6fb113f",
+    "build_date" : "2020-03-26T06:34:37.794943Z",
+    "build_snapshot" : false,
+    "lucene_version" : "8.4.0",
+    "minimum_wire_compatibility_version" : "6.8.0",
+    "minimum_index_compatibility_version" : "6.0.0-beta1"
+  },
+  "tagline" : "You Know, for Search"
+}
 ```
 
+> 容器之间相互隔离，如何使用kibana连接es?
+
+[端口暴露](../assets/drawio/kibana_es.drawio ':include :type=code')
