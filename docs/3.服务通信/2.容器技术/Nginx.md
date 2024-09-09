@@ -280,3 +280,30 @@ liming@liming-virtual-machine:~$ curl localhost:9200
 > 容器之间相互隔离，如何使用kibana连接es?
 
 [端口暴露](../assets/drawio/kibana_es.drawio ':include :type=code')
+
+
+### 可视化
+Portainer是Docker的图形化界面管理工具！
+```bash
+# 安装(\后一定要换行)
+liming@liming-virtual-machine:~$ sudo docker run -d -p 8088:9000 \
+ --restart=always -v /var/run/docker.sock:/var/run/docker.sock --privileged=true portainer/portainer
+Unable to find image 'portainer/portainer:latest' locally
+latest: Pulling from portainer/portainer
+772227786281: Pull complete 
+96fd13befc87: Pull complete 
+0bad1d247b5b: Pull complete 
+b5d1b01b1d39: Pull complete 
+Digest: sha256:47b064434edf437badf7337e516e07f64477485c8ecc663ddabbe824b20c672d
+Status: Downloaded newer image for portainer/portainer:latest
+1e59cf63ad7f1d4877a43ffccc95e34a45c3d5803d94fcdefe9d335f1815e8fc
+```
+访问localhost:8088（阿里云打开安全组访问ip:8088）
+
+[8088](./assets/images/localhost8088.png)
+
+输入密码和确认密码，就可以进去了
+
+[8088](./assets/images/portainer_index.png)
+
+> 极少使用，了解即可
