@@ -300,10 +300,10 @@ Status: Downloaded newer image for portainer/portainer:latest
 ```
 访问localhost:8088（阿里云打开安全组访问ip:8088）
 
-[8088](./assets/images/localhost8088.png)
+![8088](./assets/images/localhost8088.png)
 
 输入密码和确认密码，就可以进去了
 
-[8088](./assets/images/portainer_index.png)
+![8088](./assets/images/portainer_index.png)
 
 > 极少使用，了解即可
