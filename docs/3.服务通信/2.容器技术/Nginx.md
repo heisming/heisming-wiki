@@ -147,6 +147,7 @@ NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED -
 23-May-2024 15:01:39.569 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
 23-May-2024 15:01:39.608 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [206] milliseconds
 # Ctrl + C
+
 liming@liming-virtual-machine:~$ sudo docker images
 REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
 hello-world   latest    d2c94e258dcb   12 months ago   13.3kB
@@ -154,14 +155,17 @@ nginx         latest    605c77e624dd   2 years ago     141MB
 tomcat        9.0       b8e65a4d736d   2 years ago     680MB  <----
 mysql         latest    3218b38490ce   2 years ago     516MB
 ubuntu        latest    ba6acccedd29   2 years ago     72.8MB
+
 liming@liming-virtual-machine:~$ sudo docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
 # 启动容器服务
 liming@liming-virtual-machine:~$ sudo docker run -d -p 3355:8080 --name tomcat01 tomcat:9.0
 833a58dd8aa88c598260dcdc8418e05a3e440f59b487302c2146e5778d3a9b96
 liming@liming-virtual-machine:~$ sudo docker ps
 CONTAINER ID   IMAGE        COMMAND             CREATED              STATUS              PORTS                                       NAMES
 833a58dd8aa8   tomcat:9.0   "catalina.sh run"   About a minute ago   Up About a minute   0.0.0.0:3355->8080/tcp, :::3355->8080/tcp   tomcat01
+
 # 打开防火墙
 liming@liming-virtual-machine:~$ sudo ufw allow 3355
 防火墙规则已更新
@@ -192,7 +196,7 @@ ROOT  docs  examples  host-manager  manager
 # localhost:3355 访问就有tomcat页面了
 ```
 
-### ES+Kibana
+## ES+Kibana
 
 > es 暴露的端口很多！
 > es 十分的耗内存

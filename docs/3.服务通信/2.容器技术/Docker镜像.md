@@ -178,3 +178,113 @@ Docker镜像都是只读，当容器启动时，一个新的可写层被加载�
 这一层就是容器层，容器之下的都叫镜像层。
 
 [端口暴露](../assets/drawio/docker_commit.drawio ':include :type=code')
+
+
+## commit镜像
+```
+docker commit 提交容器成为一个新的镜像
+
+# 命令和git原理类似
+docker commit -m="提交的描述信息" -a="作者" 容器id 目标镜像名:目标镜像标签
+```
+
+```bash
+# 启动默认的tomcat镜像
+liming@liming-virtual-machine:~$ sudo docker run -it -p 3355:8080 tomcat:9.0
+Using CATALINA_BASE:   /usr/local/tomcat
+Using CATALINA_HOME:   /usr/local/tomcat
+Using CATALINA_TMPDIR: /usr/local/tomcat/temp
+Using JRE_HOME:        /usr/local/openjdk-11
+Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+Using CATALINA_OPTS:   
+NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+11-Sep-2024 13:06:01.340 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.56
+11-Sep-2024 13:06:01.343 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Dec 2 2021 14:30:07 UTC
+11-Sep-2024 13:06:01.343 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.56.0
+11-Sep-2024 13:06:01.344 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Linux
+11-Sep-2024 13:06:01.344 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            6.8.0-40-generic
+11-Sep-2024 13:06:01.344 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+11-Sep-2024 13:06:01.345 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /usr/local/openjdk-11
+11-Sep-2024 13:06:01.345 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           11.0.13+8
+11-Sep-2024 13:06:01.346 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+11-Sep-2024 13:06:01.346 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /usr/local/tomcat
+11-Sep-2024 13:06:01.346 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /usr/local/tomcat
+11-Sep-2024 13:06:01.363 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+11-Sep-2024 13:06:01.363 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+11-Sep-2024 13:06:01.363 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+11-Sep-2024 13:06:01.363 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+11-Sep-2024 13:06:01.363 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+11-Sep-2024 13:06:01.363 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/usr/local/tomcat/conf/logging.properties
+11-Sep-2024 13:06:01.363 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+11-Sep-2024 13:06:01.363 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+11-Sep-2024 13:06:01.367 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+11-Sep-2024 13:06:01.370 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dorg.apache.catalina.security.SecurityListener.UMASK=0027
+11-Sep-2024 13:06:01.371 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+11-Sep-2024 13:06:01.372 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/usr/local/tomcat
+11-Sep-2024 13:06:01.374 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/usr/local/tomcat
+11-Sep-2024 13:06:01.374 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/usr/local/tomcat/temp
+11-Sep-2024 13:06:01.383 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.2.31] using APR version [1.7.0].
+11-Sep-2024 13:06:01.384 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+11-Sep-2024 13:06:01.384 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+11-Sep-2024 13:06:01.387 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 1.1.1k  25 Mar 2021]
+11-Sep-2024 13:06:01.762 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+11-Sep-2024 13:06:01.786 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [643] milliseconds
+11-Sep-2024 13:06:01.852 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+11-Sep-2024 13:06:01.852 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.56]
+11-Sep-2024 13:06:01.861 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+11-Sep-2024 13:06:01.892 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [105] milliseconds
+
+liming@liming-virtual-machine:~$ sudo docker ps
+CONTAINER ID   IMAGE        COMMAND             CREATED         STATUS        PORTS                                       NAMES
+0859a20ae6e6   tomcat:9.0   "catalina.sh run"   2 seconds ago   Up 1 second   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp   flamboyant_kepler
+
+# 进入容器，拷贝webapps.dist目录的文件至webapps（官方镜像默认没有webapps应用）。
+liming@liming-virtual-machine:~$ sudo docker exec -it 0859a20ae6e6 /bin/bash
+root@0859a20ae6e6:/usr/local/tomcat# cd webapps
+root@0859a20ae6e6:/usr/local/tomcat/webapps# ls
+root@0859a20ae6e6:/usr/local/tomcat/webapps# cd ..
+root@0859a20ae6e6:/usr/local/tomcat# ls
+BUILDING.txt  CONTRIBUTING.md  LICENSE	NOTICE	README.md  RELEASE-NOTES  RUNNING.txt  bin  conf  lib  logs  native-jni-lib  temp  webapps  webapps.dist  work
+root@0859a20ae6e6:/usr/local/tomcat# cp -r webapps.dist/* webapps
+root@0859a20ae6e6:/usr/local/tomcat# cd webapps
+root@0859a20ae6e6:/usr/local/tomcat/webapps# ls
+ROOT  docs  examples  host-manager  manager
+root@0859a20ae6e6:/usr/local/tomcat/webapps# exit
+
+ubuntu查看端口占用命令是？
+liming@liming-virtual-machine:~$ sudo lsof -i:8080
+COMMAND    PID   USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+chrome    4082 liming   24u  IPv6  85425      0t0  TCP ip6-localhost:43588->ip6-localhost:http-alt (ESTABLISHED)
+chrome    4082 liming   37u  IPv6  85456      0t0  TCP ip6-localhost:43594->ip6-localhost:http-alt (ESTABLISHED)
+docker-pr 8169   root    4u  IPv4  84998      0t0  TCP *:http-alt (LISTEN)
+docker-pr 8175   root    3u  IPv6  84484      0t0  TCP ip6-localhost:http-alt->ip6-localhost:43588 (ESTABLISHED)
+docker-pr 8175   root    4u  IPv6  85003      0t0  TCP *:http-alt (LISTEN)
+docker-pr 8175   root    5u  IPv4  84486      0t0  TCP 192.168.146.130:35590->172.17.0.2:http-alt (SYN_SENT)
+docker-pr 8175   root    9u  IPv6  85459      0t0  TCP ip6-localhost:http-alt->ip6-localhost:43594 (ESTABLISHED)
+docker-pr 8175   root   10u  IPv4  85461      0t0  TCP 192.168.146.130:35606->172.17.0.2:http-alt (SYN_SENT)
+
+# 如果发现localhost:3355无法访问，检查以下项目
+# 防火墙打开
+liming@liming-virtual-machine:~$ sudo ufw allow 3355
+防火墙规则已更新
+规则已更新(v6)
+# 重启docker服务
+liming@liming-virtual-machine:~$ sudo service docker restart
+# 需要重新重启镜像和拷贝webapps.dist目录
+
+# 提交镜像（进行操作后的tomcat）
+liming@liming-virtual-machine:~$ sudo docker commit -a="liming" -m="commit local image" da6c6681467b tomcat_commit:1.0
+sha256:9d38ddd276a26da792fde63fdec1702ae50c908051ad2323daedcc18d2adde99
+liming@liming-virtual-machine:~$ sudo docker images
+REPOSITORY            TAG       IMAGE ID       CREATED         SIZE
+tomcat_commit         1.0       9d38ddd276a2   6 seconds ago   685MB  <----- 提交的镜像
+redis                 latest    590b81f2fea1   6 weeks ago     117MB
+hello-world           latest    d2c94e258dcb   16 months ago   13.3kB
+portainer/portainer   latest    5f11582196a4   22 months ago   287MB
+nginx                 latest    605c77e624dd   2 years ago     141MB
+tomcat                9.0       b8e65a4d736d   2 years ago     680MB
+mysql                 latest    3218b38490ce   2 years ago     516MB
+ubuntu                latest    ba6acccedd29   2 years ago     72.8MB
+elasticsearch         7.6.2     f29a1ee41030   4 years ago     791MB
+
+```
